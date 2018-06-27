@@ -1,0 +1,432 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+    namespace="com.xyauto.interact.broker.server.dao.IBrokerCustomerCarsWillDao">
+    <resultMap id="BaseResultMap" type="com.xyauto.interact.broker.server.model.vo.BrokerCustomerCarsWill">
+        <id column="broker_customer_cars_will_id" jdbcType="BIGINT" property="brokerCustomerCarsWillId" />
+        <result column="broker_customer_id" jdbcType="BIGINT" property="brokerCustomerId" />
+        <result column="broker_id" jdbcType="BIGINT" property="brokerId" />
+        <result column="broker_clue_id" jdbcType="BIGINT" property="brokerClueId" />
+        <result column="brand_id" jdbcType="INTEGER" property="brandId" />
+        <result column="subbrand_id" jdbcType="INTEGER" property="subBrandId" />
+        <result column="series_id" jdbcType="INTEGER" property="seriesId" />
+        <result column="car_id" jdbcType="INTEGER" property="carId" />
+        <result column="category" jdbcType="TINYINT" property="category" />
+        <result column="register_province_id" jdbcType="INTEGER" property="registerProvinceId" />
+        <result column="register_city_id" jdbcType="INTEGER" property="registerCityId" />
+        <result column="pay_type" jdbcType="TINYINT" property="payType" />
+        <result column="exchange_type" jdbcType="BIT" property="exchangeType" />
+        <result column="buy_desc" jdbcType="TINYINT" property="buyDesc" />
+        <result column="budget" jdbcType="VARCHAR" property="budget" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="is_allopatry_register" jdbcType="TINYINT" property="isAllopatryRegister" />
+        <result column="is_deal" jdbcType="TINYINT" property="isDeal" />
+    </resultMap>
+
+    <resultMap id="BrokerDealRecord"
+               type="com.xyauto.interact.broker.server.model.vo.BrokerDealRecord">
+        <result column="car_id" property="carId" />
+        <result column="brand_id" property="brandId" />
+        <result column="subbrand_id" property="subBrandId" />
+        <result column="series_id" property="seriesId" />
+        <result column="broker_customer_id" property="brokerCustomerId" />
+        <result column="deal_time" property="dealTime" />
+        <result column="receipt_status" property="receiptStatus" />
+        <association property="brokerCustomer" javaType="com.xyauto.interact.broker.server.model.vo.BrokerCustomer">
+            <result property="brokerCustomerId" column="broker_customer_id" />
+            <result property="userName" column="username" />
+        </association>
+        <association property="series" javaType="com.xyauto.interact.broker.server.model.vo.Series">
+            <result property="seriesId" column="series_id" />
+            <result property="name" column="series_name" />
+        </association>
+        <association property="brokerReceipt" javaType="com.xyauto.interact.broker.server.model.vo.BrokerReceipt">
+            <result property="brokerReceiptId" column="broker_receipt_id" />
+            <result property="createTime" column="create_time" />
+            <result property="status" column="receipt_status" />
+            <result property="images" column="images" />
+        </association>
+    </resultMap>
+	
+    <resultMap type="com.xyauto.interact.broker.server.model.vo.BrokerDealVo" id="BrokerDeal_result">
+        <result property="brokerCustomerId" column="broker_customer_id" />
+        <result property="dealTime" column="deal_time"  />
+        <result property="customerName" column="username" />
+        <result property="brokerReceiptId" column="broker_receipt_id" />
+        <result property="createTime" column="create_time" />
+        <result property="status" column="receipt_status" />
+        <result property="image" column="images" />		
+        <result property="brokerName" column="broker_name" />
+        <association property="series" javaType="com.xyauto.interact.broker.server.model.vo.Series">
+            <result property="seriesId" column="series_id" />
+            <result property="name" column="series_name" />
+        </association>	
+        <association property="car" javaType="com.xyauto.interact.broker.server.model.vo.Car">
+            <result property="carId" column="car_id" />
+            <result property="name" column="car_name" />
+        </association>	
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        broker_change_type,
+        buyustomer_cars_will_id, broker_customer_id, broker_clue_id, brand_id, subbrand_id,
+        series_id, car_id, category, register_province_id, register_city_id, pay_type,
+        exc_desc, budget, create_time, update_time, is_deleted, delete_time,
+        is_allopatry_register
+    </sql>
+    <sql id="Base_Column_Lists">
+        broker_customer_cars_will_id, broker_customer_id, broker_clue_id, brand_id, subbrand_id,
+        series_id, car_id, category, register_province_id, register_city_id, pay_type, exchange_type,
+        buy_desc, budget, create_time, update_time, is_deleted, delete_time, is_allopatry_register,
+        is_deal, deal_time
+    </sql>
+    <select id="getCarsWillByPrimaryKey" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_Lists" />
+        FROM broker_customer_cars_will WHERE broker_customer_cars_will_id = #{brokerCustomerCarsWillId}
+    </select>
+
+
+    <select id="getCarsWillByClueId" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_Lists" />
+        FROM broker_customer_cars_will WHERE broker_clue_id = #{clueId}
+    </select>
+
+    <select id="getCarsWillByCustomerId" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_Lists" />
+        FROM broker_customer_cars_will WHERE broker_customer_id =
+        #{brokerCustomerId}
+        AND is_deleted=0 AND is_deal=0 order by create_time DESC LIMIT 1
+    </select>
+    <select id="getCustomerCarsByID" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_Lists" />
+        FROM broker_customer_cars_will WHERE broker_customer_cars_will_id =
+        #{cars_will_id} AND broker_customer_id=#{broker_customer_id} AND is_deleted=0
+    </select>
+
+    <select id="getBrokerDealCount" resultType="java.lang.Integer">
+        SELECT COUNT(0) from broker_customer_cars_will where is_deal=1 and
+        broker_customer_id in (SELECT broker_customer_id from broker_customer where broker_id = #{brokerId})
+        and <![CDATA[ deal_time > #{dealTime} ]]>
+    </select>
+
+    <update id="BuyCarFinsh">
+        update broker_customer_cars_will
+        set is_deal=1,deal_time=SYSDATE(),update_time=now()
+        WHERE broker_customer_cars_will_id = #{brokerCustomerCarsWillId}
+    </update>
+    <update id="updateParamByCustomerId"
+            parameterType="com.xyauto.interact.broker.server.model.vo.BrokerCustomerCarsWill">
+        update broker_customer_cars_will
+        <set>
+            <if test="record.brokerClueId != null">
+                broker_clue_id = #{record.brokerClueId,jdbcType=BIGINT},
+            </if>
+            <if test="record.brandId != null">
+                brand_id = #{record.brandId,jdbcType=INTEGER},
+            </if>
+            <if test="record.subBrandId != null">
+                subbrand_id = #{record.subBrandId,jdbcType=INTEGER},
+            </if>
+            <if test="record.seriesId != null">
+                series_id = #{record.seriesId,jdbcType=INTEGER},
+            </if>
+            <if test="record.carId != null">
+                car_id = #{record.carId,jdbcType=INTEGER},
+            </if>
+            <if test="record.category != null">
+                category = #{record.category,jdbcType=TINYINT},
+            </if>
+
+            <if test="record.payType != null">
+                pay_type = #{record.payType,jdbcType=TINYINT},
+            </if>
+            <if test="record.exchangeType != null">
+                exchange_type = #{record.exchangeType,jdbcType=TINYINT},
+            </if>
+
+            <if test="record.isAllopatryRegister != null">
+                is_allopatry_register = #{record.isAllopatryRegister,jdbcType=TINYINT},
+            </if>
+
+            <if test="record.isDeal != null">
+                deal_time=SYSDATE(),
+                is_deal = #{record.isDeal,jdbcType=TINYINT},
+            </if>
+            update_time = SYSDATE()
+        </set>
+        WHERE broker_customer_id = #{record.brokerCustomerId}
+    </update>
+
+    <select id="getDealRecords" resultMap="BrokerDealRecord">
+        select bccw.broker_customer_id, deal_time, brand_id, subbrand_id,
+        series_id, car_id,
+        ifnull(br.status, -2) as receipt_status
+        from broker_customer_cars_will bccw
+        join broker_customer bc on bc.broker_customer_id = bccw.broker_customer_id
+        left join broker_receipt br on br.broker_customer_cars_will_id =
+        bccw.broker_customer_cars_will_id
+        where bccw.is_deal = 1
+        and bc.broker_id in
+        <foreach item="item" index="index" collection="broker_ids"
+                 open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        order by bccw.deal_time
+    </select>
+    <insert id="create"
+            parameterType="com.xyauto.interact.broker.server.model.vo.BrokerCustomerCarsWill">
+        insert into broker_customer_cars_will
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="brokerCustomerCarsWillId != 0">
+                broker_customer_cars_will_id,
+            </if>
+            <if test="brokerCustomerId != 0">
+                broker_customer_id,
+            </if>
+            <if test="brokerClueId != 0">
+                broker_clue_id,
+            </if>
+            <if test="brandId != 0">
+                brand_id,
+            </if>
+            <if test="subBrandId != 0">
+                subbrand_id,
+            </if>
+            <if test="seriesId != 0">
+                series_id,
+            </if>
+            <if test="carId != 0">
+                car_id,
+            </if>
+            <if test="category != 0">
+                category,
+            </if>
+            <if test="registerProvinceId != 0">
+                register_province_id,
+            </if>
+            <if test="registerCityId != 0">
+                register_city_id,
+            </if>
+            <if test="payType != 0">
+                pay_type,
+            </if>
+            <if test="exchangeType != 0">
+                exchange_type,
+            </if>
+            <if test="buyDesc != 0">
+                buy_desc,
+            </if>
+            <if test='budget != 0'>
+                budget,
+            </if>
+            <if test="isAllopatryRegister != -1">
+                is_allopatry_register,
+            </if>
+            create_time, update_time
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="brokerCustomerCarsWillId != 0">
+                #{brokerCustomerCarsWillId,jdbcType=BIGINT},
+            </if>
+            <if test="brokerCustomerId != 0">
+                #{brokerCustomerId,jdbcType=BIGINT},
+            </if>
+            <if test="brokerClueId != 0">
+                #{brokerClueId,jdbcType=BIGINT},
+            </if>
+            <if test="brandId != 0">
+                #{brandId,jdbcType=INTEGER},
+            </if>
+            <if test="subBrandId != 0">
+                #{subBrandId,jdbcType=INTEGER},
+            </if>
+            <if test="seriesId != 0">
+                #{seriesId,jdbcType=INTEGER},
+            </if>
+            <if test="carId != 0">
+                #{carId,jdbcType=INTEGER},
+            </if>
+            <if test="category != 0">
+                #{category,jdbcType=TINYINT},
+            </if>
+            <if test="registerProvinceId != 0">
+                #{registerProvinceId,jdbcType=INTEGER},
+            </if>
+            <if test="registerCityId != 0">
+                #{registerCityId,jdbcType=INTEGER},
+            </if>
+            <if test="payType != 0">
+                #{payType,jdbcType=TINYINT},
+            </if>
+            <if test="exchangeType != 0">
+                #{exchangeType,jdbcType=TINYINT},
+            </if>
+            <if test="buyDesc != 0">
+                #{buyDesc,jdbcType=TINYINT},
+            </if>
+            <if test='budget != ""'>
+                #{budget,jdbcType=VARCHAR},
+            </if>
+            <if test="isAllopatryRegister != -1">
+                #{isAllopatryRegister,jdbcType=TINYINT},
+            </if>
+            now(), now()
+        </trim>
+    </insert>
+
+    <select id="getDealRecordList"  resultMap="BrokerDeal_result">
+        SELECT b.`name` as broker_name,bc.broker_customer_id,bc.username,
+        s.`name` as series_name,
+        bccw.deal_time,bccw.series_id,
+        br.broker_receipt_id,br.create_time,
+        CASE 
+        when  br.`status` is  null  then -2
+        ELSE br.`status`
+        END as receipt_status,
+        br.images, c.`name` as car_name
+        from broker_customer_cars_will bccw
+        join broker_customer bc ON bc.broker_customer_id=bccw.broker_customer_id
+        JOIN series s on bccw.series_id=s.series_id
+        join car c on bccw.car_id=c.car_id
+        JOIN broker b on b.broker_id=bc.broker_id
+        LEFT JOIN broker_receipt br
+        on bccw.broker_customer_cars_will_id=br.broker_customer_cars_will_id
+        and br.is_deleted=0
+        where bccw.is_deal=1 and bccw.is_deleted=0  and bc.is_deleted=0
+        <if test="brandId != 0">
+            and bccw.brand_id=#{brandId}
+        </if>
+        <if test="seriesId != 0">
+            and bccw.series_id=#{seriesId}
+        </if>
+        <if test="carId != 0">
+            and bccw.car_id=#{carId}
+        </if>
+        <if test="dealerId!=0">
+            and bc.dealer_id=#{dealerId}
+        </if>
+        <if test="brokerId!=0">
+            and bc.broker_id=#{brokerId}
+        </if>
+        <if test="status!=null">
+            and br.`status`=#{status}
+        </if>	
+        <if test="startTime!=null">
+            and bccw.deal_time &gt;=#{startTime}
+        </if>
+        <if test="endTime!=null">
+            and bccw.deal_time &lt;=#{endTime}
+        </if>	
+
+        <if test="limit!=0 and  page!=0">
+            LIMIT #{page},#{limit}
+        </if>
+		
+    </select>
+	
+	
+    <select id="getDealRecordsCount"  resultType="java.lang.Integer">
+        SELECT COUNT(bccw.broker_customer_cars_will_id)
+        from broker_customer_cars_will bccw
+        join broker_customer bc ON bc.broker_customer_id=bccw.broker_customer_id
+        JOIN series s on bccw.series_id=s.series_id
+        LEFT JOIN broker_receipt br
+        on bccw.broker_customer_cars_will_id=br.broker_customer_cars_will_id
+        and br.is_deleted=0
+        where bccw.is_deal=1 and bccw.is_deleted=0
+        <if test="brandId!=0">
+            and bccw.brand_id=#{brandId}
+        </if>
+        <if test="seriesId!=0">
+            and bccw.series_id=#{seriesId}
+        </if>
+        <if test="carId!=0">
+            and bccw.car_id=#{carId}
+        </if>
+        <if test="dealerId!=0">
+            and bc.dealer_id=#{dealerId}
+        </if>
+        <if test="brokerId!=0">
+            and bc.broker_id=#{brokerId}
+        </if>
+        <if test="status!=null">
+            and br.`status`=#{status}
+        </if>	
+        <if test="startTime!=null ">
+            and bccw.deal_time &gt;=#{startTime}
+        </if>
+        <if test="endTime!=null">
+            and bccw.deal_time &lt;=#{endTime}
+        </if>	
+        and bc.is_deleted=0		
+    </select>
+        
+        
+        
+    <update id="update">
+        <selectKey keyProperty="count" resultType="int" order="BEFORE">
+            select count(1) from broker_customer_cars_will
+            where broker_customer_id=#{brokerCustomerId}
+            and is_deleted = 0 and is_deal = 0
+        </selectKey>
+        <if test="count==0">
+            insert into broker_customer_cars_will
+            set create_time = now(),
+            update_time = now(),
+            broker_customer_id = #{brokerCustomerId}
+            <if test="carId>0">
+                ,car_id = #{carId}
+            </if>
+            <if test="brandId>0">
+                ,brand_id = #{brandId}
+            </if>
+            <if test="subBrandId>0">
+                ,subbrand_id = #{subBrandId}
+            </if>
+            <if test="seriesId>0">
+                ,series_id = #{seriesId}
+            </if>
+            <if test="exchangeType!=0">
+                ,exchange_type = #{exchangeType}
+            </if>
+            <if test="isAllopatryRegister!=-1">
+                ,is_allopatry_register = #{isAllopatryRegister}
+            </if>
+            <if test="payType!=0">
+                ,pay_type = #{payType}
+            </if>
+        </if>
+        <if test="count>0">
+            update broker_customer_cars_will
+            set update_time = now()
+            <if test="carId>0">
+                ,car_id = #{carId}
+            </if>
+            <if test="brandId>0">
+                ,brand_id = #{brandId}
+            </if>
+            <if test="subBrandId>0">
+                ,subbrand_id = #{subBrandId}
+            </if>
+            <if test="seriesId>0">
+                ,series_id = #{seriesId}
+            </if>
+            <if test="exchangeType!=0">
+                ,exchange_type = #{exchangeType}
+            </if>
+            <if test="isAllopatryRegister!=-1">
+                ,is_allopatry_register = #{isAllopatryRegister}
+            </if>
+            <if test="payType!=0">
+                ,pay_type = #{payType}
+            </if>
+            where broker_customer_id = #{brokerCustomerId}
+            and is_deleted = 0 and is_deal = 0
+        </if>
+    </update>
+    
+</mapper>

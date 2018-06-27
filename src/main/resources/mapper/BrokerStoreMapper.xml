@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xyauto.interact.broker.server.dao.IBrokerStoreDao">
+  <resultMap id="BaseResultMap" type="com.xyauto.interact.broker.server.model.vo.BrokerStore">
+    <id column="store_id" jdbcType="BIGINT" property="storeId" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="introduction" jdbcType="VARCHAR" property="introduction" />
+    <result column="qr_code" jdbcType="VARCHAR" property="qrCode" />
+    <result column="broker_id" jdbcType="BIGINT" property="brokerId" />
+    <result column="store_url" jdbcType="VARCHAR" property="storeUrl" />
+    <result column="template_id" jdbcType="INTEGER" property="templateId" />
+    <result column="dealer_id" jdbcType="BIGINT" property="dealerId" />
+    <result column="sale_series" jdbcType="VARCHAR" property="saleSeries" />
+
+<!--    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="is_deleted" jdbcType="TINYINT" property="isDeleted" />-->
+
+  </resultMap>
+  <sql id="Base_Column_List">
+    store_id, title, introduction, qr_code, broker_id, store_url, template_id, create_time, 
+    update_time, is_deleted,dealer_id,sale_series
+  </sql>
+
+
+
+
+
+  <update id="updateParamByBrokerId" parameterType="com.xyauto.interact.broker.server.model.vo.BrokerStore">
+    update broker_store
+    <set>
+      <if test="record.title != null">
+        title = #{record.title},
+      </if>
+      <if test="record.introduction != null">
+        introduction = #{record.introduction},
+      </if>
+      <if test="record.qrCode != null">
+        qr_code = #{record.qrCode},
+      </if>
+      <if test="record.storeUrl != null">
+        store_url = #{record.storeUrl},
+      </if>
+      <if test="record.templateId != null">
+        template_id = #{record.templateId},
+      </if>
+      <if test="record.saleSeries !=null">
+        sale_series =#{record.saleSeries},
+      </if>
+      update_time = SYSDATE()
+    </set>
+    where broker_id = #{record.brokerId}
+  </update>
+
+  <update id="updateParamByStoreId" parameterType="com.xyauto.interact.broker.server.model.vo.BrokerStore">
+    update broker_store
+    <set>
+      <if test="record.title != null">
+        title = #{record.title},
+      </if>
+      <if test="record.introduction != null">
+        introduction = #{record.introduction},
+      </if>
+      <if test="record.qrCode != null">
+        qr_code = #{record.qrCode},
+      </if>
+      <if test="record.brokerId != null">
+        broker_id = #{record.brokerId},
+      </if>
+      <if test="record.storeUrl != null">
+        store_url = #{record.storeUrl},
+      </if>
+      <if test="record.templateId != null">
+        template_id = #{record.templateId},
+      </if>
+      <if test="record.saleSeries !=null">
+        sale_series =#{record.saleSeries},
+      </if>
+      update_time = SYSDATE()
+
+    </set>
+    where store_id = #{record.storeId}
+  </update>
+
+
+  <insert id="create" parameterType="com.xyauto.interact.broker.server.model.vo.BrokerStore">
+      <selectKey keyProperty="count" resultType="int" order="BEFORE">
+          select count(1) from broker_store
+          where broker_id=#{record.brokerId}
+      </selectKey>
+      <if test="count==0">
+          insert into broker_store
+          <trim prefix="(" suffix=")" suffixOverrides=",">
+              <if test="record.title != null">
+                  title,
+              </if>
+              <if test="record.introduction != null">
+                  introduction,
+              </if>
+              <if test="record.qrCode != null">
+                  qr_code,
+              </if>
+              <if test="record.brokerId != null">
+                  broker_id,
+              </if>
+              <if test="record.storeUrl != null">
+                  store_url,
+              </if>
+              <if test="record.templateId != null">
+                  template_id,
+              </if>
+              <if test="record.dealerId != null">
+                  dealer_id,
+              </if>
+          </trim>
+          <trim prefix="values (" suffix=")" suffixOverrides=",">
+              <if test="record.storeId != null">
+                  #{record.storeId},
+              </if>
+              <if test="record.title != null">
+                  #{record.title},
+              </if>
+              <if test="record.introduction != null">
+                  #{record.introduction},
+              </if>
+              <if test="record.qrCode != null">
+                  #{record.qrCode},
+              </if>
+              <if test="record.brokerId != null">
+                  #{record.brokerId},
+              </if>
+              <if test="record.storeUrl != null">
+                  #{record.storeUrl},
+              </if>
+              <if test="record.templateId != null">
+                  #{record.templateId},
+              </if>
+              <if test="record.dealerId != null">
+                  #{record.dealerId},
+              </if>
+          </trim>
+      </if>
+  </insert>
+
+  <select id="get"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from broker_store WHERE broker_id=#{brokerId} and is_deleted=0 limit 1
+  </select>
+
+  <select id="getByDealerId"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from broker_store WHERE dealer_id=#{dealerId} and is_deleted=0
+    limit #{limit} offset #{page}
+  </select>
+  
+  <select id="getCountByDealerId"  resultType="java.lang.Integer">
+    select count(0)
+    from broker_store WHERE dealer_id=#{dealerId} and is_deleted=0
+  </select>
+</mapper>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xyauto.interact.broker.server.dao.IDealerCarDao">
+  <resultMap id="BaseResultMap" type="com.xyauto.interact.broker.server.model.vo.DealerCar">
+    <id column="dealer_car_id" jdbcType="BIGINT" property="dealerCarId" />
+    <result column="dealer_id" jdbcType="BIGINT" property="dealerId" />
+    <result column="brand_id" jdbcType="INTEGER" property="brandId" />
+    <result column="subbrand_id" jdbcType="INTEGER" property="subBrandId" />
+    <result column="series_id" jdbcType="INTEGER" property="seriesId" />
+    <result column="car_id" jdbcType="INTEGER" property="carId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    dealer_car_id, dealer_id, brand_id, subbrand_id, series_id, car_id, create_time, 
+    update_time, is_deleted, delete_time
+  </sql>
+
+  <select id="getListByDealer"  resultType="java.lang.Long">
+  SELECT brand_id from dealer_car where dealer_id=#{dealerId} and is_deleted=0  group by brand_id
+</select>
+
+  <select id="getSeriesIdsByDealer"  resultType="java.lang.Long">
+    SELECT series_id from dealer_car where dealer_id=#{dealerId} and is_deleted=0  group by series_id
+  </select>
+</mapper>

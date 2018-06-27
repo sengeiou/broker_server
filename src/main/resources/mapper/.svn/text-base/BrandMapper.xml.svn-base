@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xyauto.interact.broker.server.dao.IBrandDao">
+    <resultMap id="Brand" type="com.xyauto.interact.broker.server.model.vo.Brand">
+        <id column="brand_id" property="brandId" />
+        <result column="logo" property="logo" />
+        <result column="name" property="name" />
+        <result column="first_letter" property="firstLetter"/>
+        <result column="create_time" property="createTime" />
+    </resultMap>
+
+    <select id="getBrand" resultMap="Brand">
+        SELECT * FROM brand where brand_id=#{brand_id} and is_deleted = 0
+    </select>
+  
+    <select id="getBrandList" resultMap="Brand">
+        SELECT * FROM brand where is_deleted = 0
+    </select>
+    
+    <select id="getBrandListByBrandIds" resultMap="Brand">
+        SELECT * FROM brand where is_deleted = 0
+        and brand_id in
+        <foreach item="item" index="index" collection="ids"  open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+    
+    <select id="getMaps" resultMap="Brand">
+        SELECT * FROM brand where is_deleted = 0
+        and brand_id in
+        <foreach item="item" index="index" collection="ids"  open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+</mapper>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xyauto.interact.broker.server.dao.IDealerSettingDao">
+  
+    <!-- 获取经销商意向等级设置-->
+    <select id="getCustomerIntentionLevel" resultType="java.util.Map">
+        select init.name, init.type, ifnull(setting.tags, init.value) as value from 
+        (
+        select 'H' as name,1 as type, 3 as value from dual
+        union
+        select 'A' as name,2 as type, 7 as value from dual
+        union
+        select 'B' as name,3 as type, 15 as value from dual
+        union
+        select 'C' as name,4 as type, 30 as value from dual
+        union
+        select 'D' as name,5 as type, -1 as value from dual
+        ) init 
+        left join
+        (
+        select * from dealer_setting
+        where type=3
+        and dealer_id=#{dealer_id}
+        ) setting
+        on init.type=setting.`status`
+    </select>
+    
+    <!-- 修改经销商意向等级设置-->
+    <insert id="setCustomerIntentionLevel">
+        <selectKey keyProperty="count" resultType="int" order="BEFORE">
+            select count(1) from dealer_setting where type = 3 and dealer_id=#{dealer_id} and status=#{type}
+        </selectKey>
+        <if test="count > 0">
+            update dealer_setting 
+            set tags = #{days}
+            where dealer_id = #{dealer_id} and status=#{type}
+        </if>
+        <if test="count==0">
+            insert into dealer_setting(dealer_id, type, tags, status)
+            values(#{dealer_id},3,#{days},#{type})
+        </if> 
+    </insert>
+    
+    <delete id="resetCustomerIntentionLevel">
+        delete from dealer_setting where dealer_id = #{dealer_id} and type = 3
+    </delete>
+
+</mapper>

@@ -1,0 +1,113 @@
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/xyinteract/!svn/ver/2036/broker_server/branches/preprod/src/main/resources/mapper
+END
+BrokerCustomerCarsMapper.xml
+K 25
+svn:wc:ra_dav:version-url
+V 115
+/svn/xyinteract/!svn/ver/1558/broker_server/branches/preprod/src/main/resources/mapper/BrokerCustomerCarsMapper.xml
+END
+BrokerCustomerMapper.xml
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/svn/xyinteract/!svn/ver/2099/broker_server/branches/preprod/src/main/resources/mapper/BrokerCustomerMapper.xml
+END
+SeriesMapper.xml
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svn/xyinteract/!svn/ver/1304/broker_server/branches/preprod/src/main/resources/mapper/SeriesMapper.xml
+END
+BrokerMapper.xml
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svn/xyinteract/!svn/ver/2099/broker_server/branches/preprod/src/main/resources/mapper/BrokerMapper.xml
+END
+DealerMapper.xml
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svn/xyinteract/!svn/ver/2099/broker_server/branches/preprod/src/main/resources/mapper/DealerMapper.xml
+END
+DealerCarMapper.xml
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/svn/xyinteract/!svn/ver/1723/broker_server/branches/preprod/src/main/resources/mapper/DealerCarMapper.xml
+END
+BrokerNoticeSettingMapper.xml
+K 25
+svn:wc:ra_dav:version-url
+V 116
+/svn/xyinteract/!svn/ver/1167/broker_server/branches/preprod/src/main/resources/mapper/BrokerNoticeSettingMapper.xml
+END
+BrokerReceiptMapper.xml
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/svn/xyinteract/!svn/ver/1971/broker_server/branches/preprod/src/main/resources/mapper/BrokerReceiptMapper.xml
+END
+BrokerStoreTemplateMapper.xml
+K 25
+svn:wc:ra_dav:version-url
+V 116
+/svn/xyinteract/!svn/ver/1390/broker_server/branches/preprod/src/main/resources/mapper/BrokerStoreTemplateMapper.xml
+END
+SubBrandMapper.xml
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/svn/xyinteract/!svn/ver/1304/broker_server/branches/preprod/src/main/resources/mapper/SubBrandMapper.xml
+END
+BrandMapper.xml
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svn/xyinteract/!svn/ver/1304/broker_server/branches/preprod/src/main/resources/mapper/BrandMapper.xml
+END
+BrokerCustomerCarsWillMapper.xml
+K 25
+svn:wc:ra_dav:version-url
+V 119
+/svn/xyinteract/!svn/ver/1941/broker_server/branches/preprod/src/main/resources/mapper/BrokerCustomerCarsWillMapper.xml
+END
+BrokerStoreMapper.xml
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svn/xyinteract/!svn/ver/1651/broker_server/branches/preprod/src/main/resources/mapper/BrokerStoreMapper.xml
+END
+CityMapper.xml
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/svn/xyinteract/!svn/ver/1390/broker_server/branches/preprod/src/main/resources/mapper/CityMapper.xml
+END
+ProvinceMapper.xml
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/svn/xyinteract/!svn/ver/1304/broker_server/branches/preprod/src/main/resources/mapper/ProvinceMapper.xml
+END
+BrokerClueMapper.xml
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svn/xyinteract/!svn/ver/2099/broker_server/branches/preprod/src/main/resources/mapper/BrokerClueMapper.xml
+END
+BrokerTemplateMapper.xml
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/svn/xyinteract/!svn/ver/1304/broker_server/branches/preprod/src/main/resources/mapper/BrokerTemplateMapper.xml
+END
+CarMapper.xml
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/xyinteract/!svn/ver/1304/broker_server/branches/preprod/src/main/resources/mapper/CarMapper.xml
+END

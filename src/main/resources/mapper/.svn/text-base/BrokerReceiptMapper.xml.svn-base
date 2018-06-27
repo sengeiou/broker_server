@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xyauto.interact.broker.server.dao.IBrokerReceiptDao">
+    <resultMap id="BaseResultMap" type="com.xyauto.interact.broker.server.model.vo.BrokerReceipt">
+        <result column="broker_receipt_id" jdbcType="BIGINT" property="brokerReceiptId" />
+        <result column="broker_id" jdbcType="BIGINT" property="brokerId" />
+        <result column="broker_customer_id" jdbcType="BIGINT" property="brokerCustomerId" />
+        <result column="broker_customer_cars_will_id" jdbcType="BIGINT" property="brokerCustomerCarsWillId" />
+        <result column="images" jdbcType="VARCHAR" property="images" />
+        <result column="status" jdbcType="TINYINT" property="status" />
+        <result column="reason" jdbcType="VARCHAR" property="reason" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="verify_time" jdbcType="TIMESTAMP" property="verifyTime" />
+    </resultMap>
+    <sql id="Base_Column_List">
+        broker_receipt_id, broker_id, broker_customer_id, broker_customer_cars_will_id, images, 
+        status, reason, create_time, update_time, verify_time, is_deleted, delete_time
+    </sql>
+
+    <select id="getInfoByBrokerId" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List" /> from broker_receipt WHERE broker_id=#{broker_id} and is_deleted=0
+        AND create_time BETWEEN #{begin} and #{end} order by create_time desc
+    </select>
+
+    <select id="getByPrimaryKey" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List" /> from broker_receipt WHERE broker_receipt_id = #{brokerReceiptId}
+    </select>
+
+    <select id="getByCustomerIdAndBrokerId" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List" /> from broker_receipt WHERE
+        broker_customer_id=#{customer_id} and broker_id=#{broker_id} and broker_customer_cars_will_id=#{broker_customer_cars_will_id}
+        and is_deleted=0
+    </select>
+
+    <update id="upLoadInvoice">
+        UPDATE broker_receipt set images = #{file_path},update_time=SYSDATE(),status=0
+        WHERE broker_id=#{broker_id} and broker_customer_id=#{customer_id} and broker_customer_cars_will_id=#{broker_customer_cars_will_id}
+    </update>
+
+
+    <update id="AllotCustomerToBtoker">
+        UPDATE broker_receipt set broker_id=#{allotBrokerCustomer}
+        WHERE broker_id=#{brokerId} and broker_customer_id=#{customerId}
+    </update>
+    <insert id="insert">
+        <selectKey  resultType="_long" keyProperty="brokerReceiptId" order="AFTER">
+            select @@IDENTITY as brokerReceiptId
+        </selectKey>
+        insert into broker_receipt
+        set create_time = now(),
+        update_time = now()
+        <if test="brokerId != 0">
+            ,broker_id = #{brokerId}
+        </if>
+        <if test="brokerCustomerId != 0">
+            ,broker_customer_id = #{brokerCustomerId}
+        </if>
+        <if test="brokerCustomerCarsWillId != 0">
+            ,broker_customer_cars_will_id = #{brokerCustomerCarsWillId}
+        </if>
+        <if test='images != ""'>
+            ,images = #{images}
+        </if>
+        <if test="status != 0">
+            ,status = #{status}
+        </if>
+        <if test='reason != ""'>
+            ,reason = #{reason}
+        </if>
+        <if test="verifyTime != 0">
+            ,verify_time = #{verifyTime}
+        </if>
+    </insert>
+</mapper>

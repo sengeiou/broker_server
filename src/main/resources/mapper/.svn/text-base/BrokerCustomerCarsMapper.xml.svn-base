@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xyauto.interact.broker.server.dao.IBrokerCustomerCarsDao">
+    <resultMap id="BrokerCustomerCars" type="com.xyauto.interact.broker.server.model.vo.BrokerCustomerCars">
+        <id column="broker_customer_cars_id" jdbcType="BIGINT" property="brokerCustomerCarsId"/>
+        <result column="broker_customer_id" jdbcType="BIGINT" property="brokerCustomerId"/>
+        <result column="broker_customer_cars_will_id" jdbcType="BIGINT" property="brokerCustomerCarsWillId"/>
+        <result column="brand_id" jdbcType="INTEGER" property="brandId"/>
+        <result column="subbrand_id" jdbcType="INTEGER" property="subBrandId"/>
+        <result column="series_id" jdbcType="INTEGER" property="seriesId"/>
+        <result column="car_id" jdbcType="INTEGER" property="carId"/>
+        <result column="plate_number" jdbcType="VARCHAR" property="plateNumber"/>
+        <result column="vin" jdbcType="VARCHAR" property="vin"/>
+        <result column="ven" jdbcType="VARCHAR" property="ven"/>
+        <result column="register_time" jdbcType="TIMESTAMP" property="registerTime"/>
+        <result column="next_maintenance_time" jdbcType="TIMESTAMP" property="nextMaintenanceTime"/>
+        <result column="next_maintenance_km" jdbcType="INTEGER" property="nextMaintenanceKm"/>
+        <result column="insurer" jdbcType="VARCHAR" property="insurer"/>
+        <result column="tci_expire_time" jdbcType="TIMESTAMP" property="tciExpireTime"/>
+        <result column="ci_expire_time" jdbcType="TIMESTAMP" property="ciExpireTime"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+    </resultMap>
+
+    <select id="getCustomerCarsByCustomerId" resultMap="BrokerCustomerCars">
+      SELECT * FROM broker_customer_cars WHERE broker_customer_id=#{customerId} and is_deleted=0
+    </select>
+    
+    <select id="getByPrimary" resultMap="BrokerCustomerCars">
+        SELECT * FROM broker_customer_cars WHERE broker_customer_cars_id=#{brokerCustomerCarsId}
+    </select>
+    
+    <insert id="addCar" parameterType="com.xyauto.interact.broker.server.model.po.BrokerCustomerCarsPersistant">
+        <selectKey  resultType="_long" keyProperty="brokerCustomerCarsId" order="AFTER">
+            select @@IDENTITY as brokerCustomerCarsId
+        </selectKey>
+        INSERT INTO `xy_broker`.`broker_customer_cars`(`broker_customer_id`,`broker_customer_cars_will_id`,`brand_id`,
+        `subbrand_id`,`series_id`,`car_id`,
+        <if test='plateNumber!=""'>
+            `plate_number`,
+        </if>
+        <if test='vin!=""'>
+            `vin`,
+        </if>
+        <if test='ven!=""'>
+            `ven`,
+        </if>
+        <if test="registerTime>0">
+            `register_time`,
+        </if>
+        <if test="nextMaintenanceTime>0">
+            `next_maintenance_time`,
+        </if>
+        <if test='nextMaintenanceKm!=""'>
+            `next_maintenance_km`,
+        </if>
+        <if test='insurer!=""'>
+            `insurer`,
+        </if>
+        <if test="tciExpireTime>0">
+            `tci_expire_time`,
+        </if>
+        <if test="ciExpireTime>0">
+            `ci_expire_time`,
+        </if>
+        `create_time`,`update_time`)
+        VALUES (
+        #{brokerCustomerId}, #{brokerCustomerCarsWillId},#{brandId}, #{subBrandId},
+        #{seriesId} ,#{carId},
+        <if test='plateNumber!=""'>
+            #{plateNumber},
+        </if>
+        <if test='vin!=""'>
+            #{vin},
+        </if>
+        <if test='ven!=""'>
+            #{ven},
+        </if>
+        <if test="registerTime>0">
+            from_unixtime( #{registerTime}, '%Y-%m-%d %H:%i:%s'),
+        </if>
+        <if test="nextMaintenanceTime>0">
+            from_unixtime( #{nextMaintenanceTime}, '%Y-%m-%d %H:%i:%s'),
+        </if>
+        <if test='nextMaintenanceKm!=""'>
+            #{nextMaintenanceKm},
+        </if>
+        <if test='insurer!=""'>
+            #{insurer},
+        </if>
+        <if test="tciExpireTime>0">
+            from_unixtime( #{tciExpireTime}, '%Y-%m-%d %H:%i:%s'),
+        </if>
+        <if test="ciExpireTime>0">
+            from_unixtime( #{ciExpireTime}, '%Y-%m-%d %H:%i:%s'),
+        </if>
+        SYSDATE(),SYSDATE()
+        )
+
+    </insert>
+    <update id="updateCar" parameterType="com.xyauto.interact.broker.server.model.po.BrokerCustomerCarsPersistant">
+        UPDATE `xy_broker`.`broker_customer_cars`
+        SET
+        `broker_customer_id` = #{brokerCustomerId},
+        <if test="brandId > 0">
+            `brand_id` = #{brandId},
+        </if>
+        <if test="subBrandId>0">
+            `subbrand_id` = #{subBrandId},
+        </if>
+        `series_id` = #{seriesId},
+        `car_id` = #{carId},
+        <if test="plateNumber!=null">
+            `plate_number` = #{plateNumber},
+        </if>
+        <if test="vin!=null">
+            `vin` = #{vin},
+        </if>
+        <if test="ven!=null">
+            `ven` = #{ven},
+        </if>
+        <if test="registerTime>0">
+            `register_time` =from_unixtime( #{registerTime}, '%Y-%m-%d %H:%i:%s'),
+        </if>
+        <if test="nextMaintenanceTime>0">
+            `next_maintenance_time` = from_unixtime(#{nextMaintenanceTime}, '%Y-%m-%d %H:%i:%s'),
+        </if>
+        <if test="nextMaintenanceKm!=null">
+            `next_maintenance_km` = #{nextMaintenanceKm},
+        </if>
+        <if test="insurer!=null">
+            `insurer` = #{insurer},
+        </if>
+        <if test="tciExpireTime>0">
+            `tci_expire_time` = from_unixtime(#{tciExpireTime}, '%Y-%m-%d %H:%i:%s'),
+        </if>
+        <if test="ciExpireTime>0">
+            `ci_expire_time` = from_unixtime(#{ciExpireTime}, '%Y-%m-%d %H:%i:%s'),
+        </if>
+        `update_time` = now()
+        WHERE `broker_customer_cars_id` = #{brokerCustomerCarsId};
+    </update>
+    <update id="deleteCar" parameterType="long">
+        UPDATE broker_customer_cars cars, broker_customer customer
+        SET cars.is_deleted = 1, cars.delete_time = now(), cars.update_time = now()
+        WHERE cars.broker_customer_id = customer.broker_customer_id
+        and cars.broker_customer_cars_id = #{broker_customer_car_id}
+        and customer.broker_id = #{broker_id}
+    </update>
+</mapper>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xyauto.interact.broker.server.dao.IBrokerIntegralLogDao">
+    <resultMap id="BaseResultMap" type="com.xyauto.interact.broker.server.model.vo.BrokerIntegralLog">
+        <id column="broker_integral_log_id" jdbcType="BIGINT" property="brokerIntegralLogId" />
+        <result column="broker_id" jdbcType="BIGINT" property="brokerId" />
+        <result column="integral" jdbcType="BIGINT" property="integral" />
+        <result column="type" jdbcType="TINYINT" property="type" />
+        <result column="description" jdbcType="VARCHAR" property="desc" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+        <result column="dealer_id" jdbcType="BIGINT" property="dealerId" />
+    </resultMap>
+    <sql id="Base_Column_List">
+        broker_integral_log_id, broker_id, integral, type, description, create_time, update_time,dealer_id
+    </sql>
+    <select id="getPageListByBrokerId" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" /> FROM broker_integral_log
+        WHERE broker_id=#{brokerId} and is_deleted=0
+        and <![CDATA[ unix_timestamp(create_time) > #{begin} ]]>
+        order by create_time Desc
+        limit #{limit} offset #{page}
+    </select>
+
+    <select id="getListByBrokerId" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" /> FROM broker_integral_log
+        WHERE broker_id=#{brokerId} and is_deleted=0
+        <if test="max!=null and max!='' and max!=0">
+            AND  <![CDATA[ unix_timestamp(create_time) < #{max} ]]>
+        </if>
+        and  <![CDATA[ unix_timestamp(create_time) > #{begin} ]]>
+        order by create_time Desc
+        limit #{limit}
+    </select>
+
+    <select id="getListCountByBrokerId" resultType="java.lang.Integer">
+        SELECT count(1) FROM broker_integral_log
+        WHERE broker_id=#{brokerId} and is_deleted=0
+        <if test="max!=null and max!='' and max!=0">
+            AND  <![CDATA[ unix_timestamp(create_time) < #{max} ]]>
+        </if>
+        and  <![CDATA[ unix_timestamp(create_time) > #{begin} ]]>
+    </select>
+
+    <select id="getPageListCountByBrokerId" resultType="java.lang.Integer">
+        SELECT <include refid="Base_Column_List" /> FROM broker_integral_log
+        WHERE broker_id=#{brokerId} and is_deleted=0
+        and <![CDATA[ unix_timestamp(create_time) > #{begin} ]]>
+    </select>
+
+    <insert id="create">
+        insert into broker_integral_log
+        set create_time = now(),
+        update_time = now()
+        <if test="brokerId != 0">
+            ,broker_id = #{brokerId}
+        </if>
+        <if test="integral != 0">
+            ,integral = #{integral}
+        </if>
+        <if test="type != 0">
+            ,type = #{type}
+        </if>
+        <if test='desc != ""'>
+            ,description = #{desc}
+        </if>
+        <if test="dealerId != 0">
+            ,dealer_id = #{dealerId}
+        </if>
+    </insert>
+
+</mapper>

@@ -1,0 +1,95 @@
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/svn/xyinteract/!svn/ver/2036/broker_server/branches/preprod/src/main/java/com/xyauto/interact/broker/server/dao
+END
+IBrokerDao.java
+K 25
+svn:wc:ra_dav:version-url
+V 128
+/svn/xyinteract/!svn/ver/1932/broker_server/branches/preprod/src/main/java/com/xyauto/interact/broker/server/dao/IBrokerDao.java
+END
+IDealerDao.java
+K 25
+svn:wc:ra_dav:version-url
+V 128
+/svn/xyinteract/!svn/ver/2099/broker_server/branches/preprod/src/main/java/com/xyauto/interact/broker/server/dao/IDealerDao.java
+END
+ICarDao.java
+K 25
+svn:wc:ra_dav:version-url
+V 125
+/svn/xyinteract/!svn/ver/1304/broker_server/branches/preprod/src/main/java/com/xyauto/interact/broker/server/dao/ICarDao.java
+END
+ISubBrandDao.java
+K 25
+svn:wc:ra_dav:version-url
+V 130
+/svn/xyinteract/!svn/ver/1304/broker_server/branches/preprod/src/main/java/com/xyauto/interact/broker/server/dao/ISubBrandDao.java
+END
+IBrokerCustomerCarsWillDao.java
+K 25
+svn:wc:ra_dav:version-url
+V 144
+/svn/xyinteract/!svn/ver/1828/broker_server/branches/preprod/src/main/java/com/xyauto/interact/broker/server/dao/IBrokerCustomerCarsWillDao.java
+END
+ICityDao.java
+K 25
+svn:wc:ra_dav:version-url
+V 126
+/svn/xyinteract/!svn/ver/1390/broker_server/branches/preprod/src/main/java/com/xyauto/interact/broker/server/dao/ICityDao.java
+END
+IBrokerNoticeSettingDao.java
+K 25
+svn:wc:ra_dav:version-url
+V 141
+/svn/xyinteract/!svn/ver/1167/broker_server/branches/preprod/src/main/java/com/xyauto/interact/broker/server/dao/IBrokerNoticeSettingDao.java
+END
+IBrokerReceiptDao.java
+K 25
+svn:wc:ra_dav:version-url
+V 135
+/svn/xyinteract/!svn/ver/1884/broker_server/branches/preprod/src/main/java/com/xyauto/interact/broker/server/dao/IBrokerReceiptDao.java
+END
+IProvinceDao.java
+K 25
+svn:wc:ra_dav:version-url
+V 130
+/svn/xyinteract/!svn/ver/1304/broker_server/branches/preprod/src/main/java/com/xyauto/interact/broker/server/dao/IProvinceDao.java
+END
+IBrokerStoreTemplateDao.java
+K 25
+svn:wc:ra_dav:version-url
+V 141
+/svn/xyinteract/!svn/ver/1390/broker_server/branches/preprod/src/main/java/com/xyauto/interact/broker/server/dao/IBrokerStoreTemplateDao.java
+END
+IBrokerClueDao.java
+K 25
+svn:wc:ra_dav:version-url
+V 132
+/svn/xyinteract/!svn/ver/2099/broker_server/branches/preprod/src/main/java/com/xyauto/interact/broker/server/dao/IBrokerClueDao.java
+END
+IBrandDao.java
+K 25
+svn:wc:ra_dav:version-url
+V 127
+/svn/xyinteract/!svn/ver/1304/broker_server/branches/preprod/src/main/java/com/xyauto/interact/broker/server/dao/IBrandDao.java
+END
+IBrokerCustomerCarsDao.java
+K 25
+svn:wc:ra_dav:version-url
+V 140
+/svn/xyinteract/!svn/ver/1304/broker_server/branches/preprod/src/main/java/com/xyauto/interact/broker/server/dao/IBrokerCustomerCarsDao.java
+END
+ISeriesDao.java
+K 25
+svn:wc:ra_dav:version-url
+V 128
+/svn/xyinteract/!svn/ver/1304/broker_server/branches/preprod/src/main/java/com/xyauto/interact/broker/server/dao/ISeriesDao.java
+END
+IBrokerCustomerDao.java
+K 25
+svn:wc:ra_dav:version-url
+V 136
+/svn/xyinteract/!svn/ver/2099/broker_server/branches/preprod/src/main/java/com/xyauto/interact/broker/server/dao/IBrokerCustomerDao.java
+END

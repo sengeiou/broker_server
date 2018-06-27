@@ -1,0 +1,119 @@
+K 25
+svn:wc:ra_dav:version-url
+V 116
+/svn/xyinteract/!svn/ver/2043/broker_server/branches/preprod/src/main/java/com/xyauto/interact/broker/server/service
+END
+BrokerIntegralService.java
+K 25
+svn:wc:ra_dav:version-url
+V 143
+/svn/xyinteract/!svn/ver/1479/broker_server/branches/preprod/src/main/java/com/xyauto/interact/broker/server/service/BrokerIntegralService.java
+END
+SubBrandService.java
+K 25
+svn:wc:ra_dav:version-url
+V 137
+/svn/xyinteract/!svn/ver/1304/broker_server/branches/preprod/src/main/java/com/xyauto/interact/broker/server/service/SubBrandService.java
+END
+BrandService.java
+K 25
+svn:wc:ra_dav:version-url
+V 134
+/svn/xyinteract/!svn/ver/1304/broker_server/branches/preprod/src/main/java/com/xyauto/interact/broker/server/service/BrandService.java
+END
+BrokerStoreService.java
+K 25
+svn:wc:ra_dav:version-url
+V 140
+/svn/xyinteract/!svn/ver/2043/broker_server/branches/preprod/src/main/java/com/xyauto/interact/broker/server/service/BrokerStoreService.java
+END
+BrokerCustomerCarsWillService.java
+K 25
+svn:wc:ra_dav:version-url
+V 151
+/svn/xyinteract/!svn/ver/1828/broker_server/branches/preprod/src/main/java/com/xyauto/interact/broker/server/service/BrokerCustomerCarsWillService.java
+END
+CityService.java
+K 25
+svn:wc:ra_dav:version-url
+V 133
+/svn/xyinteract/!svn/ver/1390/broker_server/branches/preprod/src/main/java/com/xyauto/interact/broker/server/service/CityService.java
+END
+BrokerLogService.java
+K 25
+svn:wc:ra_dav:version-url
+V 138
+/svn/xyinteract/!svn/ver/2036/broker_server/branches/preprod/src/main/java/com/xyauto/interact/broker/server/service/BrokerLogService.java
+END
+DataAttachService.java
+K 25
+svn:wc:ra_dav:version-url
+V 139
+/svn/xyinteract/!svn/ver/1976/broker_server/branches/preprod/src/main/java/com/xyauto/interact/broker/server/service/DataAttachService.java
+END
+ProvinceService.java
+K 25
+svn:wc:ra_dav:version-url
+V 137
+/svn/xyinteract/!svn/ver/1304/broker_server/branches/preprod/src/main/java/com/xyauto/interact/broker/server/service/ProvinceService.java
+END
+BrokerClueService.java
+K 25
+svn:wc:ra_dav:version-url
+V 139
+/svn/xyinteract/!svn/ver/2099/broker_server/branches/preprod/src/main/java/com/xyauto/interact/broker/server/service/BrokerClueService.java
+END
+BrokerTemplateService.java
+K 25
+svn:wc:ra_dav:version-url
+V 143
+/svn/xyinteract/!svn/ver/1828/broker_server/branches/preprod/src/main/java/com/xyauto/interact/broker/server/service/BrokerTemplateService.java
+END
+CarService.java
+K 25
+svn:wc:ra_dav:version-url
+V 132
+/svn/xyinteract/!svn/ver/1304/broker_server/branches/preprod/src/main/java/com/xyauto/interact/broker/server/service/CarService.java
+END
+BrokerCustomerService.java
+K 25
+svn:wc:ra_dav:version-url
+V 143
+/svn/xyinteract/!svn/ver/2099/broker_server/branches/preprod/src/main/java/com/xyauto/interact/broker/server/service/BrokerCustomerService.java
+END
+SeriesService.java
+K 25
+svn:wc:ra_dav:version-url
+V 135
+/svn/xyinteract/!svn/ver/1418/broker_server/branches/preprod/src/main/java/com/xyauto/interact/broker/server/service/SeriesService.java
+END
+DealerService.java
+K 25
+svn:wc:ra_dav:version-url
+V 135
+/svn/xyinteract/!svn/ver/2099/broker_server/branches/preprod/src/main/java/com/xyauto/interact/broker/server/service/DealerService.java
+END
+BrokerService.java
+K 25
+svn:wc:ra_dav:version-url
+V 135
+/svn/xyinteract/!svn/ver/2099/broker_server/branches/preprod/src/main/java/com/xyauto/interact/broker/server/service/BrokerService.java
+END
+DealerClueDistributeSettingService.java
+K 25
+svn:wc:ra_dav:version-url
+V 156
+/svn/xyinteract/!svn/ver/1828/broker_server/branches/preprod/src/main/java/com/xyauto/interact/broker/server/service/DealerClueDistributeSettingService.java
+END
+BrokerReceiptService.java
+K 25
+svn:wc:ra_dav:version-url
+V 142
+/svn/xyinteract/!svn/ver/1884/broker_server/branches/preprod/src/main/java/com/xyauto/interact/broker/server/service/BrokerReceiptService.java
+END
+BrokerNoticeSettingService.java
+K 25
+svn:wc:ra_dav:version-url
+V 148
+/svn/xyinteract/!svn/ver/1167/broker_server/branches/preprod/src/main/java/com/xyauto/interact/broker/server/service/BrokerNoticeSettingService.java
+END

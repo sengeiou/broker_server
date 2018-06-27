@@ -1,0 +1,115 @@
+# \u6570\u636e\u5e93\u8bbf\u95ee\u914d\u7f6e
+# master
+druid.master.driverClassName=com.mysql.jdbc.Driver
+druid.master.url=jdbc:mysql://192.168.3.10:3306/xy_broker?useUnicode=true&characterEncoding=utf8&rewriteBatchedStatements=true&useSSL=false
+druid.master.username=root
+druid.master.password=1qaz@WSX
+# slave first
+druid.slave.first.driverClassName=com.mysql.jdbc.Driver
+druid.slave.first.url=jdbc:mysql://192.168.3.10:3306/xy_broker?useUnicode=true&characterEncoding=utf8&rewriteBatchedStatements=true&useSSL=false
+druid.slave.first.username=root
+druid.slave.first.password=1qaz@WSX
+
+# \u6570\u636e\u5e93\u8fde\u63a5\u6c60\u914d\u7f6e
+spring.datasource.initialSize=50
+spring.datasource.minIdle=50
+spring.datasource.maxActive=500
+spring.datasource.maxWait=60000
+spring.datasource.timeBetweenEvictionRunsMillis=60000
+spring.datasource.minEvictableIdleTimeMillis=300000
+spring.datasource.removeAbandoned=true  
+spring.datasource.removeAbandonedTimeout=1800 
+spring.datasource.validationQuery=SELECT 1 FROM DUAL
+spring.datasource.testWhileIdle=true
+spring.datasource.testOnBorrow=false
+spring.datasource.testOnReturn=false
+spring.datasource.poolPreparedStatements=false
+spring.datasource.maxPoolPreparedStatementPerConnectionSize=100
+# \u914d\u7f6e\u76d1\u63a7\u7edf\u8ba1\u62e6\u622a\u7684filters\uff0c\u53bb\u6389\u540e\u76d1\u63a7\u754c\u9762sql\u65e0\u6cd5\u7edf\u8ba1\uff0c'wall'\u7528\u4e8e\u9632\u706b\u5899 
+spring.datasource.filters=stat,wall,log4j
+# \u901a\u8fc7connectProperties\u5c5e\u6027\u6765\u6253\u5f00mergeSql\u529f\u80fd\uff1b\u6162SQL\u8bb0\u5f55
+spring.datasource.connectionProperties=druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+
+# mybatis
+mybatis.typeAliasesPackage=com.xyauto.interact.broker.server.model.vo  
+mybatis.mapperLocations=classpath:/mapper/*.xml
+#logging.level.com.xyauto.interact.broker.server.dao=DEBUG
+
+# \u7f16\u7801
+spring.http.encoding.force=true
+spring.http.encoding.charset=UTF-8
+spring.http.encoding.enabled=true
+server.tomcat.uri-encoding=UTF-8
+
+# cache
+spring.cache.type=guava
+
+#gzip
+#server.compression.enabled=true
+#server.compression.mime-types=application/json,application/xml,text/html,text/xml,text/plain
+
+# \u5173\u95edhealth\u5065\u5eb7\u68c0\u67e5
+management.health.solr.enabled=false
+management.health.db.enabled=false
+management.health.elasticsearch.enabled=false
+management.health.jms.enabled=false
+management.health.mail.enabled=false
+management.health.mongo.enabled=false
+management.health.rabbit.enabled=false
+management.health.redis.enabled=false
+management.security.enabled=false
+endpoints.health.sensitive=true
+#cloud
+fastcloud.packages=com.broker.server.cloud
+# eureka
+server.port=8080
+spring.application.name=qcdq-interact-broker-server
+eureka.instance.leaseRenewalIntervalInseconds=3
+eureka.instance.prefer-ip-address=true
+eureka.client.serviceUrl.defaultZone=http://192.168.3.133:11100/eureka/
+feign.okhttp.enabled=true
+feign.hystrix.enabled=true
+
+#REDIS (RedisProperties)
+spring.redis.cluster.nodes=192.168.3.63:6379,192.168.3.63:6380,192.168.3.64:6379,192.168.3.64:6380,192.168.3.65:6379,192.168.3.65:6380
+spring.redis.cluster.max-redirects=3
+
+# mq
+spring.sleuth.sampler.percentage=1.0
+spring.rabbitmq.host=192.168.3.18
+spring.rabbitmq.port=5672
+spring.rabbitmq.username=admin
+spring.rabbitmq.password=123.com
+spring.rabbitmq.virtualHost=/
+
+# elasticsearch
+xyauto.broker.search.host=192.168.3.59:9200
+xyauto.broker.search.master=elasticsearch
+xyauto.broker.search.index=interact_test
+
+# kafka
+spring.kafka.bootstrap-servers=192.168.3.89:9092,192.168.3.90:9092
+spring.kafka.consumer.group-id=interact-server-consumer
+spring.kafka.consumer.key-deserializer=org.apache.kafka.common.serialization.StringDeserializer
+spring.kafka.consumer.value-deserializer=org.apache.kafka.common.serialization.StringDeserializer
+spring.kafka.producer.key-serializer=org.apache.kafka.common.serialization.StringSerializer
+spring.kafka.producer.value-serializer=org.apache.kafka.common.serialization.StringSerializer
+spring.kafka.producer.batch-size=65536
+spring.kafka.producer.buffer-memory=524288
+
+# fastdfs
+fdfs.soTimeout=1500
+fdfs.connectTimeout=600
+fdfs.thumbImage.width=150
+fdfs.thumbImage.height=150
+fdfs.trackerList[0]=192.168.3.71:22122
+
+# jpush
+xyauto.interact.push.appKey=c7c427817a4a84372a76aef6
+xyauto.interact.push.secret=3cf3dcd8dd48f5b28c2f0715
+xyauto.interact.push.pushUrl=https://api.jpush.cn/v3/push
+xyauto.interact.push.prod=false
+
+# constant
+pic.url.avatarGroup1Root=http://192.168.3.71/
+pic.url.avatarGroup2Root=http://192.168.3.72/

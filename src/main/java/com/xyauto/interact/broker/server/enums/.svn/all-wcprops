@@ -1,0 +1,59 @@
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/svn/xyinteract/!svn/ver/1900/broker_server/branches/preprod/src/main/java/com/xyauto/interact/broker/server/enums
+END
+BrokerTemplateTypeEnum.java
+K 25
+svn:wc:ra_dav:version-url
+V 142
+/svn/xyinteract/!svn/ver/1304/broker_server/branches/preprod/src/main/java/com/xyauto/interact/broker/server/enums/BrokerTemplateTypeEnum.java
+END
+PushMessage.java
+K 25
+svn:wc:ra_dav:version-url
+V 131
+/svn/xyinteract/!svn/ver/1390/broker_server/branches/preprod/src/main/java/com/xyauto/interact/broker/server/enums/PushMessage.java
+END
+BrokerClueTypeEnum.java
+K 25
+svn:wc:ra_dav:version-url
+V 138
+/svn/xyinteract/!svn/ver/1390/broker_server/branches/preprod/src/main/java/com/xyauto/interact/broker/server/enums/BrokerClueTypeEnum.java
+END
+BrokerLogEnum.java
+K 25
+svn:wc:ra_dav:version-url
+V 133
+/svn/xyinteract/!svn/ver/1900/broker_server/branches/preprod/src/main/java/com/xyauto/interact/broker/server/enums/BrokerLogEnum.java
+END
+BrokerNoticeSettingEnum.java
+K 25
+svn:wc:ra_dav:version-url
+V 143
+/svn/xyinteract/!svn/ver/1167/broker_server/branches/preprod/src/main/java/com/xyauto/interact/broker/server/enums/BrokerNoticeSettingEnum.java
+END
+BrokerEnum.java
+K 25
+svn:wc:ra_dav:version-url
+V 130
+/svn/xyinteract/!svn/ver/1828/broker_server/branches/preprod/src/main/java/com/xyauto/interact/broker/server/enums/BrokerEnum.java
+END
+BrokerClueHandleTypeEnum.java
+K 25
+svn:wc:ra_dav:version-url
+V 144
+/svn/xyinteract/!svn/ver/1396/broker_server/branches/preprod/src/main/java/com/xyauto/interact/broker/server/enums/BrokerClueHandleTypeEnum.java
+END
+LogDesc.java
+K 25
+svn:wc:ra_dav:version-url
+V 127
+/svn/xyinteract/!svn/ver/1692/broker_server/branches/preprod/src/main/java/com/xyauto/interact/broker/server/enums/LogDesc.java
+END
+BrokerTypeEnum.java
+K 25
+svn:wc:ra_dav:version-url
+V 134
+/svn/xyinteract/!svn/ver/1651/broker_server/branches/preprod/src/main/java/com/xyauto/interact/broker/server/enums/BrokerTypeEnum.java
+END

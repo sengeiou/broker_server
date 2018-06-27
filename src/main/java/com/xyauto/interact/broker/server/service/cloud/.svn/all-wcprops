@@ -1,0 +1,83 @@
+K 25
+svn:wc:ra_dav:version-url
+V 122
+/svn/xyinteract/!svn/ver/2036/broker_server/branches/preprod/src/main/java/com/xyauto/interact/broker/server/service/cloud
+END
+ApiServiceFactory.java
+K 25
+svn:wc:ra_dav:version-url
+V 145
+/svn/xyinteract/!svn/ver/1976/broker_server/branches/preprod/src/main/java/com/xyauto/interact/broker/server/service/cloud/ApiServiceFactory.java
+END
+RXyhPlatformService.java
+K 25
+svn:wc:ra_dav:version-url
+V 147
+/svn/xyinteract/!svn/ver/2036/broker_server/branches/preprod/src/main/java/com/xyauto/interact/broker/server/service/cloud/RXyhPlatformService.java
+END
+BaseDealerService.java
+K 25
+svn:wc:ra_dav:version-url
+V 145
+/svn/xyinteract/!svn/ver/1723/broker_server/branches/preprod/src/main/java/com/xyauto/interact/broker/server/service/cloud/BaseDealerService.java
+END
+DealerPriceService.java
+K 25
+svn:wc:ra_dav:version-url
+V 146
+/svn/xyinteract/!svn/ver/1304/broker_server/branches/preprod/src/main/java/com/xyauto/interact/broker/server/service/cloud/DealerPriceService.java
+END
+RDataCenterService.java
+K 25
+svn:wc:ra_dav:version-url
+V 146
+/svn/xyinteract/!svn/ver/1884/broker_server/branches/preprod/src/main/java/com/xyauto/interact/broker/server/service/cloud/RDataCenterService.java
+END
+CallCenterService.java
+K 25
+svn:wc:ra_dav:version-url
+V 145
+/svn/xyinteract/!svn/ver/1558/broker_server/branches/preprod/src/main/java/com/xyauto/interact/broker/server/service/cloud/CallCenterService.java
+END
+RClueHandleService.java
+K 25
+svn:wc:ra_dav:version-url
+V 146
+/svn/xyinteract/!svn/ver/1941/broker_server/branches/preprod/src/main/java/com/xyauto/interact/broker/server/service/cloud/RClueHandleService.java
+END
+InfomationService.java
+K 25
+svn:wc:ra_dav:version-url
+V 145
+/svn/xyinteract/!svn/ver/1108/broker_server/branches/preprod/src/main/java/com/xyauto/interact/broker/server/service/cloud/InfomationService.java
+END
+RBrokerLogService.java
+K 25
+svn:wc:ra_dav:version-url
+V 145
+/svn/xyinteract/!svn/ver/1828/broker_server/branches/preprod/src/main/java/com/xyauto/interact/broker/server/service/cloud/RBrokerLogService.java
+END
+PushService.java
+K 25
+svn:wc:ra_dav:version-url
+V 139
+/svn/xyinteract/!svn/ver/1828/broker_server/branches/preprod/src/main/java/com/xyauto/interact/broker/server/service/cloud/PushService.java
+END
+BrokerTaskService.java
+K 25
+svn:wc:ra_dav:version-url
+V 145
+/svn/xyinteract/!svn/ver/1971/broker_server/branches/preprod/src/main/java/com/xyauto/interact/broker/server/service/cloud/BrokerTaskService.java
+END
+BrokerAssistService.java
+K 25
+svn:wc:ra_dav:version-url
+V 147
+/svn/xyinteract/!svn/ver/1108/broker_server/branches/preprod/src/main/java/com/xyauto/interact/broker/server/service/cloud/BrokerAssistService.java
+END
+BaseCarService.java
+K 25
+svn:wc:ra_dav:version-url
+V 142
+/svn/xyinteract/!svn/ver/1723/broker_server/branches/preprod/src/main/java/com/xyauto/interact/broker/server/service/cloud/BaseCarService.java
+END

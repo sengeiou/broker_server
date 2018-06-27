@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xyauto.interact.broker.server.dao.IDealerDao">
+    <resultMap id="Dealer" type="com.xyauto.interact.broker.server.model.vo.Dealer">
+        <id column="dealer_id"  property="dealerId" />
+        <result column="short_name" property="shortName"/>
+        <result column="name" property="name"/>
+        <result column="address" property="address"/>
+        <result column="latitude" property="latitude"/>
+        <result column="longitude" property="longitude"/>
+        <result column="manufacturer_id" property="manufacturerId"/>
+        <result column="corporation_id" property="corporationId"/>
+        <result column="province_id" property="provinceId"/>
+        <result column="city_id" property="cityId"/>
+        <result column="district_id" property="districtId"/>
+        <result column="brand_ids" property="brandIds"/>
+        <result column="status" property="status"/>
+        <result column="create_time"  property="createTime" />
+    </resultMap>
+    
+    <resultMap id="Car" type="com.xyauto.interact.broker.server.model.vo.Car">
+        <id column="car_id" property="carId"/>
+        <result column="brand_id" property="brandId"/>
+        <result column="series_id" property="seriesId"/>
+        <result column="subbrand_id" property="subBrandId"/>
+    </resultMap>
+        
+    <select id="get" resultMap="Dealer">
+        select dealer_id, short_name, name, type, address, latitude, longitude, manufacturer_id, corporation_id,
+        province_id, city_id, district_id, brand_ids, status, create_time, update_time
+        from dealer
+        where dealer_id = #{dealer_id} and is_deleted = 0
+    </select>
+    
+    <select id="getAlways" resultMap="Dealer">
+        select dealer_id, short_name, name, type, address, latitude, longitude, manufacturer_id, corporation_id,
+        province_id, city_id, district_id, brand_ids, status, create_time, update_time
+        from dealer
+        where dealer_id = #{dealer_id}
+    </select>
+    
+    <select id="getDealerCars" resultMap="Car">
+        select car_id, brand_id, subbrand_id, series_id
+        from dealer_car
+        where is_deleted = 0 and dealer_id = #{dealer_id}
+    </select>
+
+    <select id="getDealerBrandIds" resultType="java.lang.Integer">
+        select brand_id
+        from dealer_car
+        where is_deleted = 0 and dealer_id = #{dealer_id}
+        group by brand_id
+    </select>
+
+    <select id="getDealerCityBrands" resultType="java.lang.String">
+        select GROUP_CONCAT(brand_ids) from dealer where city_id=#{city_id} and brand_ids!=''
+    </select>
+    
+    <select id="getDealerCitySeries" resultType="java.lang.Integer">
+        select dc.series_id from dealer_car dc
+        join dealer d on d.dealer_id = dc.dealer_id
+        where city_id=#{city_id} and brand_id=#{brand_id}
+    </select>
+
+
+    <select id="getDealersByWeigth" resultMap="Dealer">
+        select dealer_id, short_name, name, type, address, latitude, longitude, manufacturer_id, corporation_id,
+        province_id, city_id, district_id, brand_ids, status, create_time, update_time
+        from dealer
+        where is_deleted = 0  limit #{limit} offset #{offset}
+    </select>
+    
+    <select id ="getMaps" resultMap="Dealer">
+        select dealer_id, short_name, name, type, address, latitude, longitude, manufacturer_id, corporation_id,
+        province_id, city_id, district_id, brand_ids, status, create_time, update_time
+        from dealer
+        where is_deleted = 0  and dealer_id in
+        <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+    
+    <insert id="insert" parameterType="com.xyauto.interact.broker.server.model.vo.Dealer">
+        INSERT into dealer (dealer_id,`name`,short_name,type,
+               address,latitude,longitude,corporation_id,province_id,
+               city_id,brand_ids,create_time,update_time)
+       VALUES (
+        #{record.dealerId},#{record.name},
+        #{record.shortName},#{record.type},
+        #{record.address},#{record.longitude},
+        #{record.latitude},#{record.corporationId},
+        #{record.provinceId},#{record.cityId},
+        #{record.brandIds},CURRENT_TIMESTAMP,CURRENT_TIMESTAMP
+              )
+    </insert>
+    <update id="update" parameterType="com.xyauto.interact.broker.server.model.vo.Dealer">
+       <set>           
+            <if test="record.name != null and record.name !=''">
+                name = #{record.name},
+            </if>
+            <if test="record.shortName != null and record.shortName!''">
+                short_name = #{record.shortName},
+            </if>
+            <if test="record.type != null and record.type >0 ">
+                type = #{record.type},
+            </if>
+            <if test="record.address!= null and record.address !=''">
+                address = #{record.address},
+            </if>
+            <if test="record.longitude != null and longitude>0">
+                longitude = #{record.longitude},
+            </if>
+            <if test="record.latitude != null and record.latitude>0">
+                latitude = #{record.latitude},
+            </if>
+            
+            <if test="record.corporationId != null  and record.corporationId>0">
+                corporation_id = #{record.corporationId},
+            </if>           
+            <if test="record.provinceId != null and record.provinceId>0">
+                province_id = #{record.provinceId},
+            </if>
+            <if test="record.cityId != null record.cityId>0">
+                city_id= #{record.cityId} ,
+            </if>
+            <if test="record.brandIds != null and  record.brandIds !=''">
+                brand_ids= #{record.brandIds} ,
+            </if>
+            update_time= CURRENT_TIMESTAMP
+        </set>
+    </update>
+</mapper>

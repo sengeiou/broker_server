@@ -1,0 +1,497 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xyauto.interact.broker.server.dao.IBrokerClueDao">
+    <resultMap id="BrokerClue" type="com.xyauto.interact.broker.server.model.vo.BrokerClue">
+        <id column="broker_clue_id" property="brokerClueId" />
+        <result column="clue_id"  property="clueId" />
+        <result column="broker_id"  property="brokerId" />
+        <result column="type" property="type" />
+        <result column="username"  property="username" />
+        <result column="mobile"  property="mobile" />
+        <result column="brand_id"  property="brandId" />
+        <result column="subbrand_id"  property="subBrandId" />
+        <result column="series_id"  property="seriesId" />
+        <result column="car_id"  property="carId" />
+        <result column="mem"  property="mem" />
+        <result column="category"  property="category" />
+        <result column="budget"  property="budget" />
+        <result column="create_time"  property="createTime" />
+        <result column="is_deleted" property="isDeleted" />
+        <result column="delete_time"  property="deleteTime" />
+        <result column="city_id"  property="cityId" />
+        <result column="province_id"  property="provinceId" />
+        <result column="dealer_id"  property="dealerId" />
+        <result column="exchange" property="exchange" />
+        <result column="call_info" property="callInfo" />
+        <result column="broker_customer_id" property="brokerCustomerId"/>
+        <result column="customer_id" property="customerId"/>
+        <result column="distribute_time" property="distributeTime"/>
+        <result column="is_distributed" property="isDistributed"/>
+        <result column="mobile_city_id" property="mobileCityId"/>
+        <result column="mobile_province_id" property="mobileProvinceId"/>
+        <result column="location_city_id" property="locationCityId"/>
+        <result column="location_province_id" property="locationProvinceId"/>
+        <result column="clue_ref_dealer_id" property="clueRefDealerId"/>
+        <result column="is_handled" property="isHandled"/>
+        <result column="sort" property="sort" />
+    </resultMap>
+
+        
+    <select id="get" resultMap="BrokerClue">
+        select *,unix_timestamp(distribute_time) as sort
+        from broker_clue
+        where broker_clue_id = #{broker_clue_id}
+        
+    </select>
+                                    
+    <select id="getClueListIds" resultType="java.lang.Long">
+        select broker_clue.broker_clue_id
+        from broker_clue
+        <if test="has_enregister == 1">
+        INNER JOIN broker_customer on broker_clue.broker_customer_id = broker_customer.broker_customer_id
+        </if>
+        <where>
+            <if test="brokerIds!=null">
+                broker_clue.broker_id in
+                <foreach item="item" index="index" collection="brokerIds" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="sources != null and sources.size()>0">
+                broker_clue.source in
+                <foreach item="item" index="index" collection="sources" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="category>0">
+                broker_clue.category = #{category}
+            </if>
+            <if test="max">
+                AND  <![CDATA[ create_time > #{max} ]]>
+            </if>
+        </where>
+        order by broker_clue.create_time Desc
+        limit #{limit}
+    </select>
+    
+    <select id="getClueDealerClue" resultMap="BrokerClue">
+        select * from broker_clue
+        <where>
+            <if test="brokerId!=null">
+              AND  broker_id=#{brokerId}
+            </if>
+            <if test="dealerId!=null">
+                AND   dealer_id=#{dealerId}
+            </if>
+            <if test="mobile!=null">
+                AND  mobile=#{mobile}
+            </if>
+        </where>
+
+    </select>
+    
+    <select id="getClueByCall" resultType="java.lang.Long">
+        SELECT MAX(broker_clue_id) from broker_clue
+        <where>
+            is_deleted=0
+            <if test="brokerIds!=null and brokerIds.size()>0">
+                AND  broker_id in
+                <foreach item="item" index="index" collection="brokerIds" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="dealerId!=null">
+                AND   dealer_id =#{dealerId}
+            </if>
+            <if test="username!=null and username!='' ">
+                AND  username LIKE '%${username}%'
+            </if>
+            <if test="mobile!=null and mobile!='' ">
+                AND  mobile LIKE '%${mobile}%'
+            </if>
+
+            <if test="cityId!=null and cityId>0">
+                AND  city_id=#{cityId}
+            </if>
+            <if test="province_id!=null and province_id>0">
+                AND  province_id=#{province_id}
+            </if>
+
+            <if test="seriesId!=null and seriesId>0">
+                AND   series_id=#{seriesId}
+            </if>
+            <if test="car_id!=null and car_id>0">
+                AND  car_id=#{car_id}
+            </if>
+
+            <if test="type!=null and type>0">
+                AND  type=#{type}
+            </if>
+            <if test="begin!=null">
+                AND  <![CDATA[ create_time > #{begin} ]]>
+            </if>
+            <if test="end!=null">
+                AND   <![CDATA[ create_time < #{end} ]]>
+            </if>
+        </where>
+        group by mobile
+        LIMIT #{limit}
+        <if test="page!=null">
+            offset #{page}
+        </if>
+    </select>
+
+    <select id="getClueByCallCount" resultType="java.lang.Integer">
+        SELECT count(0) from broker_clue
+        <where>
+            is_deleted=0
+            <if test="brokerIds!=null and brokerIds.size()>0">
+                AND  broker_id in
+                <foreach item="item" index="index" collection="brokerIds" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="dealerId!=null">
+                AND   dealer_id =#{dealerId}
+            </if>
+            <if test="username!=null and username!='' ">
+                AND  username LIKE '%${username}%'
+            </if>
+            <if test="mobile!=null and mobile!='' ">
+                AND  mobile LIKE '%${mobile}%'
+            </if>
+
+            <if test="cityId!=null and cityId>0">
+                AND  city_id=#{cityId}
+            </if>
+            <if test="province_id!=null and province_id>0">
+                AND  province_id=#{province_id}
+            </if>
+
+            <if test="seriesId!=null and seriesId>0">
+                AND   series_id=#{seriesId}
+            </if>
+            <if test="car_id!=null and car_id>0">
+                AND  car_id=#{car_id}
+            </if>
+
+            <if test="type!=null and type>0">
+                AND  type=#{type}
+            </if>
+            <if test="begin!=null">
+                AND  <![CDATA[ create_time > #{begin} ]]>
+            </if>
+            <if test="end!=null">
+                AND   <![CDATA[ create_time < #{end} ]]>
+            </if>
+        </where>
+        group by mobile
+    </select>
+
+                                    
+    <select id="getClueListIdsByPage" resultType="java.lang.Long">
+        select broker_clue.broker_clue_id
+        from broker_clue
+        <if test="has_enregister ==1">
+            INNER JOIN broker_customer on broker_clue.broker_customer_id = broker_customer.broker_customer_id
+        </if>
+        <where>
+            <if test="brokerIds!=null  and brokerIds.size()>0">
+                broker_clue.broker_id in
+                <foreach item="item" index="index" collection="brokerIds" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="sources!=null and sources.size()>0">
+                broker_clue.source in
+                <foreach item="item" index="index" collection="sources" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="category>0">
+                broker_clue.category = #{category}
+            </if>
+        </where>
+        order by broker_clue.create_time Desc
+        limit #{limit} offset #{page}
+    </select>
+                                    
+    <select id="getClueList" resultMap="BrokerClue">
+        select *, unix_timestamp(distribute_time) as sort
+        from broker_clue
+        WHERE broker_clue_id in
+        <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        order by field(broker_clue_id,
+        <foreach item="item" index="index" collection="ids" open="" separator="," close="">  
+            #{item}
+        </foreach>
+        )
+    </select>
+    <select id="getClueHistory" resultMap="BrokerClue">
+        SELECT * FROM broker_clue
+        WHERE is_deleted=0
+            <if test="brokerid>0">
+                AND  broker_id=#{brokerid}
+            </if>
+            <if test="clueid>0">
+                AND  broker_clue_id=#{clueid}
+            </if>
+            <if test="customerid>0">
+                AND  broker_customer_id=#{customerid}
+            </if>
+            <if test="max">
+                AND   <![CDATA[ create_time > #{max} ]]>
+            </if>
+
+        order by create_time desc
+        limit #{limit}
+    </select>
+    <select id="getClueHistoryByPage" resultMap="BrokerClue">
+        SELECT * FROM broker_clue
+        WHERE is_deleted=0
+            <if test="brokerid>0">
+              AND  broker_id=#{brokerid}
+            </if>
+            <if test="clueid>0">
+              AND  broker_clue_id=#{clueid}
+            </if>
+            <if test="customerid>0">
+              AND broker_customer_id=#{customerid}
+            </if>
+        order by create_time desc
+        limit #{limit} offset #{page}
+    </select>
+
+
+    <select id="getClueHistoryNoPage" resultMap="BrokerClue">
+        SELECT * FROM broker_clue
+        WHERE is_deleted=0
+        <if test="brokerid>0">
+            AND  broker_id=#{brokerid}
+        </if>
+        <if test="clueid>0">
+            AND  broker_clue_id=#{clueid}
+        </if>
+        <if test="customerid>0">
+            AND broker_customer_id=#{customerid}
+        </if>
+        order by create_time desc
+    </select>
+
+    <update id="updateClueBroker">
+        UPDATE broker_clue set broker_id = #{brokerId}, update_time=now() WHERE broker_customer_id=#{customerid} and broker_id=#{customerBrokerId}
+    </update>
+    
+    <update id="updateClueCustomer">
+        UPDATE broker_clue set broker_customer_id = #{customerId}, update_time=now() WHERE broker_clue_id=#{brokerClueId}
+    </update>
+    
+    <select id="getNextAllottingBrokerId" resultType="java.lang.Long">
+        select ifnull(max(broker_id),0) from (
+        select broker_id,
+        <![CDATA[
+        ifnull((select UNIX_TIMESTAMP(create_time) from broker_clue where source<5 and is_public<2 and broker_id=broker.broker_id and TO_DAYS(create_time) = TO_DAYS(NOW()) order by create_time desc limit 1),0) as count
+        ]]>
+        from broker where
+        dealer_id = #{dealer_id} and is_deleted = 0 and type in (1,2)
+        and broker_id in
+        <foreach item="item" index="index" collection="broker_ids" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        order by count
+        limit 1) a
+    </select>
+    
+    <insert id="addNetClue" parameterType="com.xyauto.interact.broker.server.cluemq.ClueEntity">
+        <selectKey resultType="_long" keyProperty="brokerClueId" order="AFTER">
+            select @@IDENTITY as brokerClueId
+        </selectKey>
+        insert into broker_clue(clue_id, type, username, mobile, brand_id, subbrand_id,
+        series_id, car_id, ip, device_id, category, distribute_type, source, dealer_id, clue_pool_id, extension, exchange, call_info, create_time,broker_customer_id,customer_id,clue_ref_dealer_id,city_id,province_id,mobile_city_id,mobile_province_id,update_time,broker_id)
+        values(#{id}, #{type}, #{customerName}, #{customerContact}, #{brandId}, #{subBrandId},
+        #{serialId}, #{carId}, #{ipAddress}, #{deviceId}, #{businessOpportunityTypeId},
+        case when #{distributedAdviserId}>0 then 2 else 1 end,
+        #{sourceId}, #{dealerId}, #{opportunityPoolId}, #{extension}, #{ownedCarInfoDTO}, #{call},
+        case when #{type}=1 then from_unixtime(#{orderTime}, '%Y-%m-%d %H:%i:%s') else now() end , #{brokerCustomerId}, #{customerId}, #{opportunityRelDealerId},#{cityId},#{provinceId},#{mobileCityId},#{mobileProvinceId}, now(),#{brokerId})
+    </insert>
+    <update id="allot">
+        update broker_clue set broker_id=#{broker_id},distribute_time=now(),update_time=now() where broker_clue_id=#{broker_clue_id}
+    </update>
+    <update id="updateAllotList">
+        update broker_clue
+        set broker_id=#{broker_id},
+        distribute_time=now(),
+        update_time=now(),
+        is_public=2
+        where
+        broker_clue_id in
+        <foreach item="item" index="index" collection="ClueIds" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
+    <!-- 分配当经纪人下手机号一样的线索To经纪人 -->
+    <update id="updateAllotByMobile">
+        update broker_clue
+        set broker_id=#{brokerId},
+        distribute_time=now(),
+        update_time=now(),
+        is_public=2
+        where
+        broker_id = #{OldBrokerId} and mobile = #{mobile}
+    </update>
+
+    <select id="getAllCount" resultType="java.lang.Integer">
+        select count(1) from broker_clue
+    </select>
+
+    <select id="getBatchBrokerList" resultMap="BrokerClue">
+        select * from broker_clue
+        order by broker_clue_id desc
+        limit #{limit} offset #{offset}
+    </select>
+    
+    <select id="getByCluePoolId" resultType="java.util.Map">
+        select
+            count(case when is_deleted=1 then 1 else null end) as deleted_count,
+            count(case when is_deleted=0 then 1 else null end) as active_count
+        from broker_clue
+        where clue_pool_id = #{clue_pool_id}
+    </select>
+    
+    <select id="getNotHandleCount" resultType="java.lang.Integer">
+        select count(1) from broker_clue
+        <where>
+            is_deleted = 0 and is_handled = 0
+            <if test='dealer_id!=0'>
+                and dealer_id = #{dealer_id}
+            </if>
+            <if test='broker_id!=0'>
+                and broker_id = #{broker_id}
+            </if>
+        </where>
+    </select>
+    
+    <select id="getNotToCustomerCount" resultType="java.lang.Integer">
+        select count(1) from broker_clue
+        <where>
+            is_deleted = 0 and is_handled = 1
+            <![CDATA[ and broker_customer_id > 0 ]]>
+            <if test='dealer_id!=0'>
+                and dealer_id = #{dealer_id}
+            </if>
+            <if test='broker_id!=0'>
+                and broker_id = #{broker_id}
+            </if>
+        </where>
+    </select>
+    
+    <select id="getNotDistributeCount" resultType="java.lang.Integer">
+        select count(1) from broker_clue
+        <where>
+            is_deleted = 0 and broker_id = 0
+            <if test='dealer_id!=0'>
+                and dealer_id = #{dealer_id}
+            </if>
+        </where>
+    </select>
+    
+    <select id="duplicateCheck" resultType="java.lang.Integer">
+        select count(1) from broker_clue
+        <where>
+            is_deleted = 0 and dealer_id = #{dealer_id} and clue_id = #{clue_id} and type = #{type}
+        </where>
+    </select>
+    
+    <select id="getClueByPoolId" resultMap="BrokerClue">
+        select * from broker_clue where clue_pool_id = #{clue_pool_id} limit 1
+    </select>
+    
+    <!-- 处理线索 -->
+    <update id="handle">
+        update broker_clue
+        set is_handled = 1, handle_time = now(),update_time=now()
+        <where>
+            <!-- broker_id = #{broker_id} -->
+            and broker_clue_id = #{broker_clue_id}
+            and is_deleted = 0
+        </where>
+    </update>
+    
+    <!-- 获取可以被丢失的线索-->
+    <select id="getClueByMiss" resultMap="BrokerClue">
+        select * from broker_clue
+        <where>
+            clue_id = #{clue_id} and dealer_id = #{dealer_id} and is_deleted = 0
+        </where>
+    </select>
+    
+    <!-- 丢失线索处理 -->
+    <update id="miss">
+        update broker_clue 
+        set is_deleted = 1, delete_time = now(), update_time = now()
+        where broker_clue_id = #{broker_clue_id} and is_handled = 0
+    </update>
+    
+    <!-- 根据电话和经销商获取最后一条线索id -->
+    <select id="getlastestByMobileDealerId" resultType="java.lang.Long">
+        select ifnull(max(broker_clue_id),0) from broker_clue
+        where mobile = #{mobile} and dealer_id = #{dealer_id}
+    </select>
+
+    <!-- 根据电话和经销商获取最后一条线索id -->
+    <select id="getClueIdsByMobileBrokerId" resultType="java.lang.Long">
+        select broker_clue_id from broker_clue
+        where mobile = #{mobile} and broker_id = #{brokerId}
+    </select>
+    
+    <!-- 检查抢单线索重复 -->
+    <select id="dunplicatePickUpCheck" resultType="java.lang.Integer">
+        select ifnull(count(1), 0) from broker_clue
+        where source = 5 and clue_id = #{clueId}
+    </select>
+    
+    <select id="limitPickUpCheck" resultType="java.lang.Integer">
+        select ifnull(count(1), 0) from broker_clue
+        where dealer_id = #{dealer_id} and source = 5
+        and to_days(create_time) = to_days(now())
+    </select>
+    
+    <select id="getbrokerClueByDealerId" resultMap="BrokerClue">
+       SELECT * from broker_clue c 
+       where c.dealer_id=#{dealerId}
+    </select>
+    
+    <select id="getNotCustomerByMobileDealerId" resultType="java.lang.Long">
+        select broker_clue_id from broker_clue
+        where mobile = #{mobile} and dealer_id = #{dealer_id} and broker_customer_id = 0
+    </select>
+    
+    <select id="getLastAllotBrokerId" resultType="java.lang.Long">
+        select ifnull(max(broker_id),0) from broker_clue
+        where dealer_id = #{dealer_id} and mobile= #{mobile}
+        and is_deleted = 0
+        order by broker_clue_id desc
+        limit 1
+    </select>
+    
+    <update id="updateClueHandle" >
+       UPDATE broker_clue 
+       set is_handled=1, handle_time = now(),update_time=now()
+       where is_handled=0 and broker_clue_id in       
+       <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
+    <select id="getBrokerClueByDealerIdAndClueIds" resultMap="BrokerClue">
+        select * from broker_clue
+        where  dealer_id = #{dealer_id}
+        AND  broker_clue_id in
+        <foreach item="item" index="index" collection="ClueIds" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+</mapper>

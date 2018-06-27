@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xyauto.interact.broker.server.dao.ISubBrandDao">
+    <resultMap id="SubBrand" type="com.xyauto.interact.broker.server.model.vo.SubBrand">
+        <id column="subbrand_id" property="subBrandId" />
+        <result column="brand_id" property="brandId" />
+        <result column="name" property="name" />
+        <result column="create_time" property="createTime" />
+    </resultMap>
+
+    <select id="getSubBrand" resultMap="SubBrand">
+        SELECT * FROM subbrand where subbrand_id=#{subbrand_id} and is_deleted = 0
+    </select>
+    
+    <select id="getMaps" resultMap="SubBrand">
+        SELECT * FROM subbrand where is_deleted = 0
+        and subbrand_id in
+        <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+</mapper>

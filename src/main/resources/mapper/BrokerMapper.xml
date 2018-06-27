@@ -1,0 +1,407 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xyauto.interact.broker.server.dao.IBrokerDao">
+    <resultMap id="Broker"
+               type="com.xyauto.interact.broker.server.model.vo.Broker">
+        <id column="broker_id" property="brokerId" />
+        <result column="uid" property="uid" />
+        <result column="name" property="name" />
+        <result column="type" property="type" />
+        <result column="dealer_id" property="dealerId" />
+        <result column="email" property="email" />
+        <result column="mobile" property="mobile" />
+        <result column="avatar" property="avatar" />
+        <result column="work_time" property="workTime" />
+        <result column="gender" property="gender" />
+        <result column="zipcode" property="zipcode" />
+        <result column="intro" property="intro" />
+        <result column="website" property="website" />
+        <result column="service_count" property="serviceCount" />
+        <result column="agree_count" property="agreeCount" />
+        <result column="qa_answer_count" property="qaAnswerCount" />
+        <result column="create_time" property="createTime" />
+        <result column="sort" property="sort" />
+        <result column="level" jdbcType="INTEGER" property="level" />
+        <result column="tags" jdbcType="VARCHAR" property="tags" />
+        <result column="bussiness_type" jdbcType="VARCHAR" property="bussinessType" />
+        <result column="ercode" jdbcType="VARCHAR" property="qrCode" />
+        <result column="user_token" jdbcType="VARCHAR" property="token" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        broker_id, uid, name, type, dealer_id, email, mobile, avatar, work_time, gender,
+        zipcode, intro, website, service_count, agree_count, qa_answer_count,
+        create_time,
+        update_time, is_deleted, delete_time, level, tags,bussiness_type,ercode, user_token
+    </sql>
+
+    <select id="get" resultMap="Broker">
+        select
+        <include refid="Base_Column_List" />
+        from broker
+        where broker_id = #{broker_id} and is_deleted = 0
+    </select>
+
+
+    <select id="getSalePerson" resultMap="Broker">
+        select
+        <include refid="Base_Column_List" />
+        from broker
+        where broker_id = #{broker_id} and is_deleted = 0 and type in (1,2)
+    </select>
+    
+    <select id="getAlways" resultMap="Broker">
+        select
+        <include refid="Base_Column_List" />
+        from broker
+        where broker_id = #{broker_id}
+    </select>
+
+    <select id="getByDealerId" resultMap="Broker">
+        select
+        <include refid="Base_Column_List" />
+        from broker
+        where  dealer_id = #{dealer_id} and is_deleted = 0
+    </select>
+
+    <select id="getTop1ServerCountByDealerId" resultMap="Broker">
+        select
+        <include refid="Base_Column_List" />
+        from broker
+        where  dealer_id = #{dealer_id} and is_deleted = 0  order by service_count desc limit 1
+    </select>
+
+    <select id="getDealerBrokerIds" resultType="java.lang.Long">
+        select broker_id
+        from broker
+        where is_deleted = 0 and dealer_id = #{dealer_id} and type in (1,2)
+    </select>
+
+    <select id="getDealerBrokerCount" resultType="java.lang.Integer">
+        select COUNT(0)
+        from broker
+        where is_deleted = 0 and dealer_id = #{dealer_id} and type in (1,2)
+    </select>
+
+    <select id="getSaleBrokerCountByDealer" resultType="java.lang.Integer">
+        select COUNT(0)
+        from broker
+        where is_deleted = 0 and dealer_id = #{dealer_id} and type in (1,2)
+    </select>
+
+    <select id="getBrokerByMobile" resultMap="Broker">
+        select <include refid="Base_Column_List" />
+        from broker
+        where is_deleted = 0 and dealer_id = #{dealer_id} and mobile=#{mobile}
+    </select>
+
+    <select id="getListIds" resultType="java.lang.Long">
+        select broker_id
+        from broker
+        <where>
+            AND is_deleted = 0
+            and type in (1,2)
+            <if test="dealer_id!=0">
+                AND dealer_id = #{dealer_id}
+            </if>
+            <if test="max!=0">
+                AND  <![CDATA[ create_time > #{max}]]>
+            </if>
+        </where>
+        order by create_time desc
+        limit #{limit}
+    </select>
+
+    <select id="getListIdsByPage" resultType="java.lang.Long">
+        select broker_id
+        from broker
+        WHERE  is_deleted = 0
+        and type in (1,2)
+        <if test="dealer_id!=0">
+            AND dealer_id = #{dealer_id}
+        </if>
+        order by create_time desc
+        limit #{limit} offset #{offset}
+    </select>
+
+    <select id="getSalePersonListIdsByPage" resultType="java.lang.Long">
+        select broker_id
+        from broker
+        WHERE is_deleted = 0 and type in (1,2)
+        <if test="dealer_id!=0">
+            AND dealer_id = #{dealer_id}
+        </if>
+        order by create_time desc
+        limit #{limit} offset #{offset}
+    </select>
+
+    <select id="getSearchListIds" resultType="java.lang.Long"
+            parameterType="com.xyauto.interact.broker.server.model.po.PagedCommonParameters">
+        select distinct broker.broker_id from broker
+        join dealer on dealer.dealer_id = broker.dealer_id
+        left join dealer_car dc on dealer.dealer_id = dc.dealer_id
+        <where>
+            <if test="params.cityId!=0">
+                dealer.city_id = #{params.city_id}
+            </if>
+            <if test="params.brandId!=0">
+                dc.brand_id = #{params.brand_id}
+            </if>
+            <if test="params.seriesId!=0">
+                dc.seriesId = #{params.seriesId}
+            </if>
+            <if test="params.carId!=0">
+                dc.car_id = #{params.carId}
+            </if>
+            <if test="max!=null and max!='0' and max!='0'.toString()">
+                AND   <![CDATA[ concat((case when broker.level=0 then '' else broker.level end), broker.create_time)<#{max} ]]>
+            </if>
+            and broker.is_deleted = 0
+            and dealer.is_deleted = 0
+            and dc.is_deleted = 0
+            and broker.type in (1,2)
+        </where>
+        order by broker.level desc, broker.create_time desc
+        limit #{limit}
+    </select>
+
+    <select id="getSearchListIdsByPage" resultType="java.lang.Long"
+            parameterType="com.xyauto.interact.broker.server.model.po.PagedCommonParameters">
+        select distinct broker.broker_id from broker
+        join dealer on dealer.dealer_id = broker.dealer_id
+        left join dealer_car dc on dealer.dealer_id = dc.dealer_id
+        <where>
+            <if test="params.cityId!=0">
+                AND dealer.city_id = #{city_id}
+            </if>
+            <if test="params.brandId!=0">
+                AND dc.brand_id = #{brand_id}
+            </if>
+            <if test="params.seriesId!=0">
+                dc.seriesId = #{params.seriesId}
+            </if>
+            <if test="params.carId!=0">
+                dc.car_id = #{params.carId}
+            </if>
+            and broker.is_deleted = 0
+            and dealer.is_deleted = 0
+            and dc.is_deleted = 0
+            and broker.type in (1,2)
+        </where>
+        order by broker.level desc, broker.create_time desc
+        limit #{limit} offset #{offset}
+    </select>
+
+    <select id="getBrokerByDealerIds" resultType="java.lang.Long">
+        SELECT  (SELECT broker_id FROM broker b  WHERE dealer_id = a.dealer_id and  type in (1,2) and is_deleted=0 ORDER BY rand()  LIMIT 1) AS broker_id
+        FROM  broker  a  where a.type in (1,2) and a.is_deleted=0 and a.dealer_id in
+        <foreach item="item" index="index" collection="dealerids" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        GROUP BY  dealer_id  order by FIELD(dealer_id,
+        <foreach item="item" index="index" collection="dealerids" open="" separator="," close="">
+            #{item}
+        </foreach>)
+        limit #{limit} offset #{offset}
+    </select>
+
+    <select id="getCountByDealerIds" resultType="java.lang.Integer">
+        SELECT COUNT(0) from (SELECT  count(1)
+        FROM  broker a
+        where  a.is_deleted = 0
+        and a.type in (1,2)
+        AND a.dealer_id in
+        <foreach item="item" index="index" collection="dealerids" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        GROUP BY dealer_id) b
+    </select>
+
+    <select id="getList" resultMap="Broker">
+        select broker_id, uid, name, type, dealer_id, email, mobile,
+        avatar, work_time, gender, zipcode, intro, website, service_count,
+        agree_count, qa_answer_count, create_time, update_time, user_token,ercode,
+        cast(level*10000000000+UNIX_TIMESTAMP(create_time) as char) as sort
+        from broker
+        where broker_id in
+        <foreach item="item" index="index" collection="ids" open="("
+                 separator="," close=")">
+            #{item}
+        </foreach>
+        order by field(broker_id,
+        <foreach item="item" index="index" collection="ids" open=""
+                 separator="," close="">
+            #{item}
+        </foreach>
+        )
+    </select>
+
+    <!-- 批量导入es计算总数 -->
+    <select id="getAllCount" resultType="java.lang.Integer">
+        select count(1) from broker
+        where is_deleted = 0 and type in (1,2)
+    </select>
+
+    <!-- 批量导入es翻页获取数据 -->
+    <select id="getBatchBrokerList" resultMap="Broker">
+        select * from broker
+        where is_deleted = 0 and type in (1,2)
+        ORDER BY broker_id desc
+        limit #{limit} offset #{offset}
+        
+    </select>
+
+    <!-- 获取经纪人获奖名单列表id -->
+    <select id="getPrizeList" resultType="java.lang.Long">
+        select broker_id from broker_prize
+        where is_expired = 0
+        <if test='begin!="" and end!=""'>
+        and create_time BETWEEN #{begin} and #{end}
+        </if>
+        order by rank
+    </select>
+
+
+    <update id="updateByParam" parameterType="com.xyauto.interact.broker.server.model.po.BrokerPo">
+        update broker
+        <set>
+            <if test="record.uid != null and record.uid>0">
+                uid = #{record.uid},
+            </if>
+            <if test="record.dealerId != null and record.dealerId>0">
+                dealer_id = #{record.dealerId},
+            </if>
+            <if test="record.name != null">
+                name = #{record.name},
+            </if>
+            <if test="record.type != null and record.type>-1">
+                type = #{record.type},
+            </if>
+
+            <if test="record.email != null">
+                email = #{record.email},
+            </if>
+            <if test="record.mobile != null">
+                mobile = #{record.mobile},
+            </if>
+            <if test="record.avatar != null">
+                avatar = #{record.avatar},
+            </if>
+            <if test="record.workTime != null">
+                work_time = #{record.workTime},
+            </if>
+            <if test="record.gender != null  and record.gender>0">
+                gender = #{record.gender},
+            </if>
+            <if test="record.zipcode != null">
+                zipcode = #{record.zipcode},
+            </if>
+            <if test="record.intro != null">
+                intro = #{record.intro},
+            </if>
+            <if test="record.website != null">
+                website = #{record.website},
+            </if>
+            <if test="record.serviceCount != null and record.serviceCount>0">
+                service_count = #{record.serviceCount},
+            </if>
+            <if test="record.agreeCount != null and record.agreeCount>0">
+                agree_count = #{record.agreeCount},
+            </if>
+            <if test="record.qaAnswerCount != null and record.qaAnswerCount>0">
+                qa_answer_count = #{record.qaAnswerCount},
+            </if>
+            <if test="record.level != null  and record.level>0">
+                level = #{record.level},
+            </if>
+            <if test="record.tags != null">
+                tags = #{record.tags} ,
+            </if>
+            <if test="record.bussinessType != null ">
+                bussiness_type= #{record.bussinessType} ,
+            </if>
+            <if test="record.qrCode != null ">
+                ercode= #{record.qrCode} ,
+            </if>
+            <if test="record.isDelete != null ">
+                is_deleted= #{record.isDelete} ,
+            </if>
+            <if test="record.deleteTime != null ">
+                delete_time= #{record.deleteTime} ,
+            </if>
+            update_time= CURRENT_TIMESTAMP
+        </set>
+        Where broker_id = #{record.brokerId}
+    </update>
+
+    <insert id="insert" parameterType="com.xyauto.interact.broker.server.model.po.BrokerPo">
+        INSERT INTO broker (
+        broker_id,uid,`name`,dealer_id,email,mobile,avatar,work_time,gender,bussiness_type,type,
+        create_time,update_time,website,ercode)
+        VALUES
+        (
+        #{record.brokerId},#{record.uid},
+        #{record.name},#{record.dealerId},
+        #{record.email},#{record.mobile},
+        #{record.avatar},#{record.workTime},
+        #{record.gender},#{record.bussinessType},
+        #{record.type},CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,
+        #{record.website},#{record.qrCode}
+        )
+    </insert>
+    
+    <select id="getPagedBrokerIds" resultType="java.lang.Long">
+        select broker_id from broker
+        where type in (1,2)
+        order by broker_id
+        limit #{limit} offset #{offset} 
+    </select>
+    
+    <select id="getBrokerIdByUid" resultType="java.lang.Long">
+        select ifnull(max(broker_id),0) as broker_id from broker
+        where uid = #{uid}
+    </select>
+    
+    <update id="deleteBroker" parameterType="java.lang.Long">
+       UPDATE broker set is_deleted=1, delete_time=CURRENT_TIMESTAMP where broker_id=${_parameter}
+    </update>
+    
+     <update id="updateBrokerPo" parameterType="com.xyauto.interact.broker.server.model.po.BrokerPo">
+     update broker
+        <set>           
+            <if test="record.name != null and record.name !=''">
+                name = #{record.name},
+            </if>
+            <if test="record.type != null and record.type>-1">
+                type = #{record.type},
+            </if>
+            <if test="record.email != null and record.email !='' ">
+                email = #{record.email},
+            </if>
+            <if test="record.mobile != null and record.mobile !=''">
+                mobile = #{record.mobile},
+            </if>
+            <if test="record.avatar != null and record.avatar !=''">
+                avatar = #{record.avatar},
+            </if>
+            <if test="record.workTime != null">
+                work_time = #{record.workTime},
+            </if>
+            <if test="record.gender != null  and record.gender>0">
+                gender = #{record.gender},
+            </if>           
+            <if test="record.website != null and record.website !=''">
+                website = #{record.website},
+            </if>
+            <if test="record.bussinessType != null record.bussinessType !=''">
+                bussiness_type= #{record.bussinessType} ,
+            </if>
+            <if test="record.qrCode != null and  record.qrCode !=''">
+                ercode= #{record.qrCode} ,
+            </if>
+            update_time= CURRENT_TIMESTAMP
+        </set>
+        Where broker_id = #{record.brokerId}
+     </update>
+
+</mapper>

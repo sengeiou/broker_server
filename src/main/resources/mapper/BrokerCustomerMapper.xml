@@ -1,0 +1,431 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xyauto.interact.broker.server.dao.IBrokerCustomerDao">
+    <resultMap id="BrokerCustomer" type="com.xyauto.interact.broker.server.model.vo.BrokerCustomer">
+        <id column="broker_customer_id" property="brokerCustomerId"/>
+        <result column="broker_clue_id" property="brokerClueId"/>
+        <result column="dealer_id" property="dealerId"/>
+        <result column="gender" property="gender"/>
+        <result column="broker_id" property="brokerId"/>
+        <result column="username" property="userName"/>
+        <result column="mobile"  property="mobile"/>
+        <result column="address"  property="address"/>
+        <result column="step"  property="step"/>
+        <result column="province_id"  property="provinceId"/>
+        <result column="city_id"  property="cityId"/>
+        <result column="create_time"  property="createTime"/>
+        <result column="sort"  property="sort"/>
+        <result column="first_contract_time" jdbcType="TIMESTAMP" property="firstContractTime" />
+        <result column="broker_clue_id_lastest" jdbcType="BIGINT" property="brokerClueIdLastest" />
+        <result column="last_contact_time" jdbcType="TIMESTAMP" property="lastContactTime" />
+        <result column="next_contact_time" jdbcType="TIMESTAMP" property="nextContactTime" />
+        <result column="level" jdbcType="TINYINT" property="level" />
+        <result column="remark" jdbcType="VARCHAR" property="remark" />
+    </resultMap>
+
+    <select id="get" resultMap="BrokerCustomer">
+        select broker_customer_id, broker_clue_id, broker_id, dealer_id, username, gender, mobile,
+        address, province_id, city_id, step, create_time, update_time, is_deleted, delete_time,
+        first_contract_time, broker_clue_id_lastest, last_contact_time, next_contact_time,
+        level, remark, ((6-level)*10000000000 + unix_timestamp(create_time)) as sort
+        from broker_customer
+        where broker_customer_id = #{brokerCustomerId} and is_deleted = 0
+    </select>
+    
+    <select id ="getCustomerIdByMobile" resultType="java.lang.Long">
+        select ifnull(max(broker_customer_id),0) from broker_customer
+        where mobile = #{mobile} and dealer_id = #{dealer_id} limit 1
+    </select>
+                
+    <select id="getListIds" resultType="java.lang.Long">
+
+        select bc.broker_customer_id
+        from broker_customer bc
+        left join (select * from broker_customer_cars_will where is_deleted = 0 and is_deal=0 ) bccw on bccw.broker_customer_id = bc.broker_customer_id
+
+         WHERE bc.is_deleted = 0
+<!--            <if test="cartype !=null and cartype>0">
+                AND bccw.category = #{cartype}
+            </if>-->
+            <if test="steps !=null  and steps.size()>0">
+                AND bc.step in
+                <foreach item="item" index="index" collection="steps" open="(" separator="," close=")">  
+                    #{item}  
+                </foreach>
+            </if>
+            <if test="categories!=null and categories.size()>0">
+                AND bccw.category in
+                <foreach item="item" index="index" collection="categories" open="(" separator="," close=")">  
+                    #{item}  
+                </foreach>
+            </if>
+            <if test="level !=null  and level.size()>0">
+                AND  bc.level in
+                <foreach item="item" index="index" collection="level" open="(" separator="," close=")">  
+                    #{item}  
+                </foreach>
+            </if>
+            <if test="cityid!=null and cityid>0">
+                AND  city_id=#{cityid}
+            </if>
+            <if test="provinceId!=null and provinceId>0">
+                AND province_id = @{provinceId}
+            </if>
+            <if test="user_name!=null and user_name!='' ">
+                AND username LIKE '%${userName}%'
+            </if>
+            <if test="mobile!=null and mobile!=''">
+                AND  mobile LIKE '%${mobile}%'
+            </if>
+            <if test="begin_time!=null and end_time!=null">
+                AND <![CDATA[ create_time > #{begin_time} ]]> AND  <![CDATA[ create_time < #{end_time} ]]>
+            </if>
+            <if test="brokerId>0">
+                AND bc.broker_id=#{brokerId}
+            </if>
+            <if test="dealerId>0">
+                AND  bc.dealer_id = #{dealerId}
+            </if>
+            <if test="max">
+                <![CDATA[ AND bc.create_time > #{max} ]]>
+            </if>
+
+        order by bc.create_time desc
+        limit #{limit}
+    </select>
+
+
+    <select id="getListIdsNoPage" resultType="java.lang.Long">
+        select broker_customer_id
+        from broker_customer
+        WHERE is_deleted =0 AND broker_id=#{brokerId}
+    </select>
+
+
+                
+    <select id="getListIdsByPage" resultType="java.lang.Long">
+        select bc.broker_customer_id
+        from broker_customer bc
+        left join (select * from broker_customer_cars_will where is_deleted = 0 and is_deal=0 ) bccw on bccw.broker_customer_id = bc.broker_customer_id
+        <where>
+            bc.is_deleted = 0
+            <if test="steps !=null  and steps.size()>0">
+            AND bc.step in
+            <foreach item="item" index="index" collection="steps" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+          </if>
+            <if test="categories!=null and categories.size()>0">
+                AND bccw.category in
+                <foreach item="item" index="index" collection="categories" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="level !=null  and level.size()>0">
+                AND  bc.level in
+                <foreach item="item" index="index" collection="level" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="cityid!=null and cityid>0">
+                AND city_id=#{cityid}
+            </if>
+            <if test="provinceId!=null and provinceId>0">
+                AND province_id = @{provinceId}
+            </if>
+            <if test="user_name!=null and user_name!='' ">
+                AND username LIKE '%${userName}%'
+            </if>
+            <if test="mobile!=null and mobile!=''">
+                AND  mobile LIKE '%${mobile}%'
+            </if>
+            <if test="begin_time!=null and end_time!=null">
+                AND <![CDATA[ create_time > #{begin_time} ]]> AND  <![CDATA[ create_time < #{end_time} ]]>
+            </if>
+            <if test="dealerId>0">
+                AND  bc.dealer_id = #{dealerId}
+            </if>
+        </where>
+        order by bc.create_time desc
+        limit #{limit} offset #{offset}
+    </select>
+                
+    <select id="getList" resultMap="BrokerCustomer">
+        select broker_customer_id, broker_clue_id, broker_id, dealer_id, username, gender, mobile,
+        address, province_id, city_id, step, create_time, update_time, is_deleted, delete_time,
+        first_contract_time, broker_clue_id_lastest, last_contact_time, next_contact_time,
+        level, remark, ((6-level)*10000000000 + unix_timestamp(create_time)) as sort
+        from broker_customer
+        where broker_customer_id in               
+        <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">  
+             #{item}  
+        </foreach>
+        order by field(broker_customer_id,
+        <foreach item="item" index="index" collection="ids" open="" separator="," close="">#{item}
+        </foreach
+        >
+        )
+    </select>
+    
+    <select id="getTodayNewCount" resultType="java.lang.Integer">
+        select count(distinct mobile)
+        from broker_customer
+        where is_deleted = 0
+        and dealer_id in
+         <foreach item="item" index="index" collection="dealerIds" open="(" separator="," close=")">  
+             #{item}  
+        </foreach>
+        and date_format(create_time, '%Y-%m-%d') = date_format(now(), '%Y-%m-%d')
+    </select>
+    
+    <select id="getFirstCustomerIdByClueId" resultType="java.lang.Long">
+        select ifnull(max(bc.broker_customer_id),0)
+        from broker_customer bc join broker_clue bcc on bcc.mobile=bc.mobile
+        where bc.is_deleted = 0
+        and bcc.clue_id = #{clue_id}
+        limit 1
+    </select>
+    
+    <select id="getCustomer" resultMap="BrokerCustomer">
+        SELECT * FROM broker_customer WHERE broker_customer_id=#{brokerCustomerId} and broker_id=#{brokerId}
+    </select>
+    <select id="getCustomerListByMobileOrNamePage" resultMap="BrokerCustomer">
+        SELECT  broker_customer_id, broker_clue_id, broker_id, dealer_id, username, gender, mobile,
+        address, province_id, city_id, step, create_time, update_time, is_deleted, delete_time,
+        first_contract_time, broker_clue_id_lastest, last_contact_time, next_contact_time,level
+        FROM broker_customer where broker_id=#{brokerId}
+        <if test="userName!=null and userName!='' ">
+           AND username LIKE '%${userName}%'
+        </if>
+        <if test="mobile!=null and mobile!=''">
+            AND  mobile LIKE '%${mobile}%'
+        </if>
+        order By create_time Desc
+        limit #{limit} offset #{offset}
+    </select>
+
+    <select id="getCustomerListByMobileOrNameMax" resultMap="BrokerCustomer">
+        SELECT  broker_customer_id, broker_clue_id, broker_id, dealer_id, username, gender, mobile,
+        address, province_id, city_id, step, create_time, update_time, is_deleted, delete_time,
+        first_contract_time, broker_clue_id_lastest, last_contact_time, next_contact_time,level
+        FROM broker_customer where broker_id=#{brokerId} AND is_deleted=0
+        <if test="userName!=null and userName!=''">
+            AND username LIKE '%${userName}%'
+        </if>
+        <if test="mobile!=null and mobile!=''">
+            AND  mobile LIKE '%${mobile}%'
+        </if>
+        <if test="max">
+            AND  <![CDATA[ create_time
+             > #{max} ]]>
+
+        </if>
+        order By create_time Desc
+        limit #{limit}
+    </select>
+
+    <update id="updateCustomerBroker">
+        UPDATE broker_customer SET  broker_id=#{brokerId}, update_time=now() WHERE
+        broker_customer_id in
+        <foreach item="item" index="index" collection="customerids" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
+    <update id="updateParmByCustomerId" parameterType="com.xyauto.interact.broker.server.model.vo.BrokerCustomer">
+        update broker_customer
+        <set>
+            <if test="record.brokerId >0">
+                broker_id = #{record.brokerId},
+            </if>
+            <if test="record.dealerId >0">
+                dealer_id = #{record.dealerId},
+            </if>
+            <if test='record.userName != ""'>
+                username = #{record.userName},
+            </if>
+            <if test="record.gender != 0">
+                gender = #{record.gender},
+            </if>
+            <if test="record.step != 0">
+                step = #{record.step},
+            </if>
+            <if test='record.remark != ""'>
+                remark = #{record.remark},
+            </if>
+            <if test="record.firstContractTime">
+                first_contract_time = #{record.firstContractTime},
+            </if>
+            <if test="record.brokerClueIdLastest != 0">
+                broker_clue_id_lastest = #{record.brokerClueIdLastest},
+            </if>
+            <if test="record.lastContactTime">
+                last_contact_time = #{record.lastContactTime},
+            </if>
+            <if test="record.nextContactTime">
+                next_contact_time = #{record.nextContactTime},
+            </if>
+            <if test="record.level != 0">
+                level = #{record.level},
+            </if>
+            update_time = SYSDATE()
+        </set>
+        where broker_customer_id = #{record.brokerCustomerId}
+    </update>
+    
+    <insert id="create" parameterType="com.xyauto.interact.broker.server.model.vo.BrokerCustomer">
+        <selectKey  resultType="_long" keyProperty="brokerCustomerId" order="AFTER">
+            select @@IDENTITY as brokerCustomerId
+        </selectKey>
+        insert into broker_customer
+            set create_time = now(),
+                update_time = now()
+            <if test="brokerClueId != 0">
+                ,broker_clue_id = #{brokerClueId}
+            </if>
+            <if test="brokerId != 0">
+                ,broker_id = #{brokerId}
+            </if>
+            <if test="dealerId != 0">
+                ,dealer_id = #{dealerId}
+            </if>
+            <if test='userName != ""'>
+                ,username = #{userName}
+            </if>
+            <if test="gender != 0">
+                ,gender = #{gender}
+            </if>
+            <if test='mobile != ""'>
+                ,mobile = #{mobile}
+            </if>
+            <if test="provinceId != 0">
+                ,province_id = #{provinceId}
+            </if>
+            <if test="cityId != 0">
+                ,city_id = #{cityId}
+            </if>
+            <if test="step != 0">
+                ,step = #{step}
+            </if>
+            <if test="firstContractTime">
+                ,first_contract_time = #{firstContractTime}
+            </if>
+            <if test="brokerClueIdLastest != 0">
+                ,broker_clue_id_lastest = #{brokerClueIdLastest}
+            </if>
+            <if test="lastContactTime">
+                ,last_contact_time = #{lastContactTime}
+            </if>
+            <if test="nextContactTime">
+                ,next_contact_time = #{nextContactTime}
+            </if>
+            <if test="level != 0">
+                ,level = #{level}
+            </if>
+            <if test='remark != ""'>
+                ,remark = #{remark}
+            </if>
+    </insert>
+    
+    
+    <select id="getListIdsCount" resultType="java.lang.Integer">
+        select count(bc.broker_customer_id)
+        from broker_customer bc
+        left join (select * from broker_customer_cars_will where is_deleted = 0 and is_deal=0 ) bccw on bccw.broker_customer_id = bc.broker_customer_id
+         WHERE bc.is_deleted = 0 
+            <if test="steps !=null  and steps.size()>0">
+                AND bc.step in
+                <foreach item="item" index="index" collection="steps" open="(" separator="," close=")">  
+                    #{item}  
+                </foreach>
+            </if>
+            <if test="categories!=null and categories.size()>0">
+                AND bccw.category in
+                <foreach item="item" index="index" collection="categories" open="(" separator="," close=")">  
+                    #{item}  
+                </foreach>
+            </if>
+            <if test="level !=null  and level.size()>0">
+                AND  bc.level in
+                <foreach item="item" index="index" collection="level" open="(" separator="," close=")">  
+                    #{item}  
+                </foreach>
+            </if>
+            <if test="cityid!=null and cityid>0">
+                city_id=#{cityid}
+            </if>
+            <if test="provinceId!=null and provinceId>0">
+                province_id = @{provinceId}
+            </if>
+            <if test="user_name!=null and user_name!='' ">
+                AND username LIKE '%${userName}%'
+            </if>
+            <if test="mobile!=null and mobile!=''">
+                AND  mobile LIKE '%${mobile}%'
+            </if>
+            <if test="begin_time!=null and end_time!=null">
+                AND <![CDATA[ create_time > #{begin_time} ]]> AND  <![CDATA[ create_time < #{end_time} ]]>
+            </if>
+            <if test="brokerId>0">
+                AND bc.broker_id=#{brokerId}
+            </if>
+            <if test="dealerId>0">
+                AND  bc.dealer_id = #{dealerId}
+            </if>
+            <if test="max">
+                <![CDATA[ AND bc.create_time > #{max} ]]>
+            </if>       
+    </select>
+
+    <select id="getTimeoutCustomerCount" resultType="java.lang.Integer">
+        select count(1) from broker_customer customer
+        left join dealer_setting ds on customer.dealer_id=ds.dealer_id
+    </select>
+    
+    <select id ="getAwaitContactList" resultType="java.util.Map">
+        <![CDATA[
+        select broker.broker_id,username,user_token as token
+        from broker_customer
+        join broker on broker.broker_id = broker_customer.broker_id
+        where DATE_SUB(next_contact_time, INTERVAL 10 MINUTE) <= now()
+        and now() <= DATE_SUB(next_contact_time, INTERVAL 9 MINUTE)
+        ]]>
+    </select>
+    
+    <select id="getAllCount" resultType="java.lang.Integer">
+        select count(1) from broker_customer where is_deleted=0
+    </select>
+    
+    <select id="getBatchBrokerList" resultType="java.lang.Long">
+        select broker_customer_id from broker_customer where is_deleted=0
+        order by broker_customer_id desc
+        limit #{limit} offset #{offset}
+    </select>
+    
+    <update id="update">
+        update broker_customer
+        set update_time = now()
+        <if test='remark!=""'>
+            ,remark= #{remark}
+        </if>
+        <if test="step!=0">
+            ,step = #{step}
+        </if>
+        <if test="level!=0">
+            ,level = #{level}
+        </if>
+        <if test='username!=""'>
+            ,username = #{username}
+        </if>
+        <if test="nextContactTime!=0">
+            ,next_contact_time = from_unixtime(#{nextContactTime}, '%Y-%m-%d %H:%i:%s')
+        </if>
+        <if test="gender!=0">
+            ,gender = #{gender}
+        </if>
+        where broker_customer_id = #{brokerCustomerId}
+
+    </update>
+    
+    
+</mapper>

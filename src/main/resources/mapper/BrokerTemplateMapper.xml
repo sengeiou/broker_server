@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xyauto.interact.broker.server.dao.IBrokerTemplateDao">
+  <resultMap id="BrokerTemplate" type="com.xyauto.interact.broker.server.model.vo.BrokerTemplate">
+    <id column="broker_template_id" jdbcType="BIGINT" property="brokerTemplateId" />
+    <result column="broker_id" jdbcType="BIGINT" property="brokerId" />
+    <result column="type" jdbcType="TINYINT" property="type" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
+    <result column="is_default" jdbcType="TINYINT" property="isDefault" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="is_locked" jdbcType="TINYINT" property="isLocked" />
+    <result column="sort" property="sort" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+      broker_template_id, broker_id, type, content, is_default, create_time, update_time,
+      is_deleted, delete_time, name, is_locked
+  </sql>
+
+   <select id="GetListByTypes"  resultMap="BrokerTemplate">
+       select <include refid="Base_Column_List" /> from broker_template
+       where  broker_id=#{brokerId}
+       <if test="types!=null and types.size()>0">
+          AND type in
+           <foreach item="item" index="index" collection="types" open="(" separator="," close=")">
+               #{item}
+           </foreach>
+       </if>
+       AND is_deleted = 0 order by is_locked desc,create_time desc
+   </select>
+
+  <select id="GetModelByTemplateId" parameterType="java.lang.Long" resultMap="BrokerTemplate">
+    select * from broker_template
+    where broker_template_id = #{templateid}
+    and is_deleted = 0
+  </select>
+
+  <select id="CheckTypeDefault"  resultType="java.lang.Short">
+      SELECT count(1) FROM broker_template WHERE type=#{type} and is_deleted = 0
+  </select>
+
+
+  <update id="ResetDefaultByType">
+    UPDATE broker_template set is_default=0 where type=#{type} and broker_id = #{brokerId} and is_deleted = 0
+  </update>
+
+  <update id="DelteTemplate">
+    UPDATE broker_template set is_deleted=0,delete_time=sysdate() where  broker_template_id=#{templateId} and broker_id = #{brokerId}
+  </update>
+
+  <select id="GetListByTypeAndBrokerId"  resultMap="BrokerTemplate">
+    select * from broker_template where broker_id=#{brokerId} and is_deleted = 0 and type=#{type}
+     order By create_time Desc
+     limit #{pageSize} offset #{pageIndex}
+  </select>
+
+  <select id="GetTemplateIdsByPage" resultType="java.lang.Long">
+    select broker_template_id from  broker_template
+    where broker_id=#{brokerId} and is_deleted=0 and type=#{type}
+    <if test="max">
+      AND  <![CDATA[ (UNIX_TIMESTAMP(create_time)*1000) > #{max} ]]>
+    </if>
+    order By is_locked desc, create_time desc
+    limit #{limit}
+  </select>
+   <select id="GetTemplateListByIds" resultMap="BrokerTemplate">
+      SELECT tb1.broker_template_id,
+          tb1.broker_id,
+          tb1.type,
+          tb1.content,
+          tb1.is_default,
+          tb1.create_time,
+          tb1.update_time,
+          tb1.is_deleted,
+          tb1.delete_time,
+          tb1.name,
+          tb1.is_locked,
+          (tb1.is_locked*10000000000+UNIX_TIMESTAMP(create_time)) as sort
+      FROM broker_template  tb1
+       <if test="ids!=null and ids.size()>0">
+      WHERE broker_template_id IN
+          <foreach collection="ids" item="id" index="index" open="(" close=")" separator=",">
+             #{id}
+          </foreach>
+       </if>
+   </select>
+  <select id="GetCountByType" resultType="java.lang.Long">
+      SELECT  count(1) FROM  broker_template WHERE  broker_id=#{brokerId} and is_deleted=0 and type=#{type}
+  </select>
+  <select id="GetLockedId" resultType="java.lang.Long">
+      SELECT  broker_template_id FROM  broker_template WHERE  broker_id=#{brokerId} and is_deleted=0 and type=#{type}
+  </select>
+
+    <update id="setDefaultByType">
+        update broker_template set is_default=1  where type=#{type} and broker_id=#{brokerId} and is_deleted=0 order by create_time DESC limit 1
+    </update>
+
+  <update id="UpdateTemplate" parameterType="com.xyauto.interact.broker.server.model.po.BrokerTemplatePersistant">
+    UPDATE `xy_broker`.`broker_template`
+    SET
+    <if test="temp.brokerId!=null">
+    `broker_id` = #{temp.brokerId},
+    </if>
+    <if test="temp.type!=null">
+    `type` = #{temp.type},
+    </if>
+    <if test="temp.content!=null">
+    `content` = #{temp.content},
+    </if>
+    <if test="temp.isDefault!=null">
+    `is_default` = #{temp.isDefault},
+    </if>
+
+    <if test="temp.isDeleted!=null">
+    `is_deleted` = #{temp.isDeleted},
+    `delete_time` =sysdate(),
+    </if>
+    <if test="temp.name!=null">
+    `name` = #{temp.name},
+    </if>
+    `update_time` = sysdate()
+    WHERE `broker_template_id` = #{temp.brokerTemplateId}
+  </update>
+
+    <insert id="Create" parameterType="com.xyauto.interact.broker.server.model.vo.BrokerTemplate">
+        <selectKey  resultType="_long" keyProperty="brokerTemplateId" order="AFTER">
+            select @@IDENTITY as brokerTemplateId
+        </selectKey>
+
+        insert into broker_template
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+
+            <if test="brokerId != null">
+                broker_id,
+            </if>
+            <if test="type != null">
+                type,
+            </if>
+            <if test="content != null">
+                content,
+            </if>
+            <if test="isDefault != null">
+                is_default,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="isDeleted != null">
+                is_deleted,
+            </if>
+            <if test="deleteTime != null">
+                delete_time,
+            </if>
+            <if test="name != null">
+                name,
+            </if>
+            <if test="isLocked != null">
+                is_locked,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="brokerId != null">
+                #{brokerId,jdbcType=BIGINT},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=TINYINT},
+            </if>
+            <if test="content != null">
+                #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="isDefault != null">
+                #{isDefault,jdbcType=TINYINT},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="isDeleted != null">
+                #{isDeleted,jdbcType=TINYINT},
+            </if>
+            <if test="deleteTime != null">
+                #{deleteTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="isLocked != null">
+                #{isLocked,jdbcType=TINYINT},
+            </if>
+        </trim>
+    </insert>
+</mapper>

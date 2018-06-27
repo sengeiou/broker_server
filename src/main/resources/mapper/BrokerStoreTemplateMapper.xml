@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xyauto.interact.broker.server.dao.IBrokerStoreTemplateDao">
+  <resultMap id="BaseResultMap" type="com.xyauto.interact.broker.server.model.vo.BrokerStoreTemplate">
+    <id column="broker_template_id" jdbcType="BIGINT" property="brokerTemplateId" />
+    <result column="template_name" jdbcType="VARCHAR" property="templateName" />
+    <result column="star_time" jdbcType="DATE" property="starTime" />
+    <result column="end_time" jdbcType="DATE" property="endTime" />
+    <result column="template_code" jdbcType="VARCHAR" property="templateCode" />
+    <result column="template_url" jdbcType="VARCHAR" property="templateUrl" />
+    <result column="is_default" jdbcType="TINYINT" property="isDefault" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    broker_template_id, template_name, star_time, end_time, template_code, template_url, 
+    is_default, is_delete, create_time, update_time
+  </sql>
+  <select id="getAll"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from broker_store_template WHERE  is_delete = 0
+  </select>
+
+  <select id="getById"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from broker_store_template WHERE  is_delete = 0 and broker_template_id=#{brokerTemplateId}
+  </select>
+
+  <select id="getDefault"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from broker_store_template WHERE  is_delete = 0 AND  is_default= 1
+  </select>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xyauto.interact.broker.server.model.vo.BrokerStoreTemplate">
+    update broker_store_template
+    <set>
+      <if test="templateName != null">
+        template_name = #{templateName,jdbcType=VARCHAR},
+      </if>
+      <if test="starTime != null">
+        star_time = #{starTime,jdbcType=DATE},
+      </if>
+      <if test="endTime != null">
+        end_time = #{endTime,jdbcType=DATE},
+      </if>
+      <if test="templateCode != null">
+        template_code = #{templateCode,jdbcType=VARCHAR},
+      </if>
+      <if test="templateUrl != null">
+        template_url = #{templateUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="isDefault != null">
+        is_default = #{isDefault,jdbcType=TINYINT},
+      </if>
+      <if test="isDelete != null">
+        is_delete = #{isDelete,jdbcType=TINYINT},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=DATE},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=DATE},
+      </if>
+    </set>
+    where broker_template_id = #{brokerTemplateId,jdbcType=BIGINT}
+  </update>
+
+</mapper>

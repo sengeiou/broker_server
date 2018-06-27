@@ -1,0 +1,77 @@
+K 25
+svn:wc:ra_dav:version-url
+V 117
+/svn/xyinteract/!svn/ver/2036/broker_server/branches/preprod/src/main/java/com/xyauto/interact/broker/server/model/vo
+END
+BrokerClueExt.java
+K 25
+svn:wc:ra_dav:version-url
+V 136
+/svn/xyinteract/!svn/ver/1971/broker_server/branches/preprod/src/main/java/com/xyauto/interact/broker/server/model/vo/BrokerClueExt.java
+END
+BrokerNoticeSetting.java
+K 25
+svn:wc:ra_dav:version-url
+V 142
+/svn/xyinteract/!svn/ver/1167/broker_server/branches/preprod/src/main/java/com/xyauto/interact/broker/server/model/vo/BrokerNoticeSetting.java
+END
+BrokerTemplate.java
+K 25
+svn:wc:ra_dav:version-url
+V 137
+/svn/xyinteract/!svn/ver/1108/broker_server/branches/preprod/src/main/java/com/xyauto/interact/broker/server/model/vo/BrokerTemplate.java
+END
+BrokerCustomerCarsWill.java
+K 25
+svn:wc:ra_dav:version-url
+V 145
+/svn/xyinteract/!svn/ver/1304/broker_server/branches/preprod/src/main/java/com/xyauto/interact/broker/server/model/vo/BrokerCustomerCarsWill.java
+END
+BrokerStore.java
+K 25
+svn:wc:ra_dav:version-url
+V 134
+/svn/xyinteract/!svn/ver/1558/broker_server/branches/preprod/src/main/java/com/xyauto/interact/broker/server/model/vo/BrokerStore.java
+END
+BrokerReceipt.java
+K 25
+svn:wc:ra_dav:version-url
+V 136
+/svn/xyinteract/!svn/ver/1304/broker_server/branches/preprod/src/main/java/com/xyauto/interact/broker/server/model/vo/BrokerReceipt.java
+END
+BrokerDealVo.java
+K 25
+svn:wc:ra_dav:version-url
+V 135
+/svn/xyinteract/!svn/ver/1304/broker_server/branches/preprod/src/main/java/com/xyauto/interact/broker/server/model/vo/BrokerDealVo.java
+END
+CluePagedList.java
+K 25
+svn:wc:ra_dav:version-url
+V 136
+/svn/xyinteract/!svn/ver/2007/broker_server/branches/preprod/src/main/java/com/xyauto/interact/broker/server/model/vo/CluePagedList.java
+END
+Broker.java
+K 25
+svn:wc:ra_dav:version-url
+V 129
+/svn/xyinteract/!svn/ver/2036/broker_server/branches/preprod/src/main/java/com/xyauto/interact/broker/server/model/vo/Broker.java
+END
+Dealer.java
+K 25
+svn:wc:ra_dav:version-url
+V 129
+/svn/xyinteract/!svn/ver/1390/broker_server/branches/preprod/src/main/java/com/xyauto/interact/broker/server/model/vo/Dealer.java
+END
+BrokerCustomer.java
+K 25
+svn:wc:ra_dav:version-url
+V 137
+/svn/xyinteract/!svn/ver/1932/broker_server/branches/preprod/src/main/java/com/xyauto/interact/broker/server/model/vo/BrokerCustomer.java
+END
+BrokerClue.java
+K 25
+svn:wc:ra_dav:version-url
+V 133
+/svn/xyinteract/!svn/ver/2036/broker_server/branches/preprod/src/main/java/com/xyauto/interact/broker/server/model/vo/BrokerClue.java
+END
